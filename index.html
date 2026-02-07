@@ -71,7 +71,7 @@
             </div>
             
             <p class="italic text-lg text-gray-400 font-serif opacity-80 fade-enter delay-1">
-                "A Knight without a name.<br>A Queen without a choice."
+                "Many paths lead to ruin.<br>Only one leads to us."
             </p>
 
             <button onclick="startGame()" class="mt-8 px-10 py-3 border border-[#c6a87c]/40 text-[#c6a87c] font-royal text-xs uppercase tracking-[0.25em] hover:bg-[#c6a87c] hover:text-black transition-all duration-500 fade-enter delay-2">
@@ -101,7 +101,7 @@
         <div class="z-10 space-y-6 mb-16 fade-enter">
             <h2 class="font-royal text-2xl md:text-3xl text-[#c6a87c]">The Covenant</h2>
             <p class="font-serif text-xl text-gray-400 italic max-w-md mx-auto leading-relaxed">
-                "I renounce the crown. I choose the man."
+                "Against the world, against the odds, I choose you."
             </p>
         </div>
 
@@ -146,6 +146,7 @@
     <script>
         // --- NARRATIVE DATABASE ---
         const story = {
+            // ACT 1: THE BANQUET
             start: {
                 text: [
                     "The year is 1426. The Kingdom of Veridia is drowning in a storm.",
@@ -156,71 +157,163 @@
                 ],
                 choices: [
                     { label: "Slip away to the gardens to stop him.", next: "garden_01" },
-                    { label: "Stay. A Queen does not chase shadows.", next: "duty_01" },
+                    { label: "Stay. A Queen does not chase shadows.", next: "end_duty" },
                     { label: "Send a page with a secret letter.", next: "letter_01" }
                 ]
             },
 
-            // --- PATH: THE GARDEN ---
+            // --- ACT 2: THE GARDEN ---
             garden_01: {
                 text: [
                     "You slip through the servants' passage, silk skirts trailing in the mud. The rain hits your skin like needles.",
                     "You find him near the stables, mounting his black steed. He freezes as you approach.",
-                    "'My Lady?' His voice is rough, like stone grinding on stone. 'You cannot be here. If the Duke sees us, it is my head on a pike.'"
+                    "'My Lady?' His voice is rough. 'You cannot be here. If the Duke sees us, it is my head on a pike.'"
                 ],
                 choices: [
                     { label: "Reach for his hand. 'I do not care.'", next: "garden_touch" },
-                    { label: "Beg him to take you away.", next: "garden_run" },
                     { label: "Hesitate. 'I just wanted to say goodbye.'", next: "end_regret" }
                 ]
             },
             garden_touch: {
                 text: [
                     "You reach out. Your trembling fingers brush his leather gauntlet. He flinches, then succumbs, covering your hand with his.",
-                    "He looks at you with a treasonous intimacy.",
-                    "'This world was not made for us,' he says. 'I am a sword to be used and discarded. You are a jewel to be sold for an alliance. We can never be.'"
+                    "'This world was not made for us,' he says. 'I am a sword to be used and discarded. You are a jewel to be sold. We can never be.'"
                 ],
                 choices: [
                     { label: "'Then let us break this world.'", next: "garden_kiss" },
                     { label: "Pull back in fear.", next: "end_fear" }
                 ]
             },
-            garden_run: {
-                text: [
-                    "'Take me away,' you plead. 'Anywhere but here.'",
-                    "The Knight looks at you with agonizing love. 'I have no home to offer you, My Queen. Only a saddle and a sword. I love you too much to make you a beggar.'"
-                ],
-                choices: [
-                    { label: "'I would rather be a beggar with you.'", next: "garden_kiss" },
-                    { label: "Realize he is right and let him go.", next: "end_regret" }
-                ]
-            },
             garden_kiss: {
                 text: [
                     "The distance vanishes. He pulls you close, his armor cold against your chest, his kiss burning with a desperate heat.",
-                    "When you pull apart, his eyes are steel. 'If we do this, there is no going back. We ride for the Blackwood ruins tonight. We will be hunted.'",
-                    "'Are you sure, my Queen?'"
+                    "When you pull apart, his eyes are steel. 'If we do this, there is no going back. We must leave Veridia tonight.'",
+                    "'How do we escape, my Queen? The choices are few, and death waits on all of them.'"
                 ],
                 choices: [
-                    { label: "Swear your life to him.", next: "ROYAL_SEAL" },
-                    { label: "Falster at the thought of being hunted.", next: "end_coward" }
+                    { label: "Ride the King's Road. It is the fastest way.", next: "path_road" },
+                    { label: "Bribe a smuggler at the Docks.", next: "path_docks" },
+                    { label: "Cross the Blackwood Forest. It is slow, but hidden.", next: "path_forest" }
                 ]
             },
 
-            // --- PATH: THE LETTER ---
-            letter_01: {
+            // --- ACT 3: THE BRANCHING PATHS ---
+
+            // PATH A: THE KING'S ROAD (Aggressive/Fast)
+            path_road: {
                 text: [
-                    "You scribble a hasty note: 'My heart goes with you.' You pay a page boy to run it to him.",
-                    "From the balcony, you watch him read it in the rain. His shoulders slump. He looks up at your window once—a look of utter devastation—before riding into the dark."
+                    "You mount his horse, riding hard down the main cobblestone road. The wind howls.",
+                    "Suddenly, torches flare ahead. A patrol of the Prince's elite guard blocks the bridge.",
+                    "'Halt!' they cry. 'Surrender the Lady!'"
                 ],
                 choices: [
-                    { label: "Run to the stables immediately.", next: "chase_horse" },
+                    { label: "Tell the Knight to fight them.", next: "fight_fail" },
+                    { label: "Try to charge through the blockade.", next: "charge_fail" }
+                ]
+            },
+            charge_fail: {
+                text: [
+                    "The Knight spurs the horse, aiming for a gap in the line. But there are too many pikes.",
+                    "The horse rears. You fall into the mud. The Knight draws his sword, standing over you, but a crossbow bolt finds his chest.",
+                    "He falls. You are dragged away screaming."
+                ],
+                choices: [
+                    { label: "Reach for him as they drag you away.", next: "end_execution" }
+                ]
+            },
+            fight_fail: {
+                 text: [
+                    "He fights with the strength of ten men. But they are twenty. He is overwhelmed.",
+                    "They do not kill him. They chain him.",
+                    "You are returned to the castle in disgrace."
+                 ],
+                 choices: [
+                    { label: "Watch them take him away.", next: "end_torture" }
+                 ]
+            },
+
+            // PATH B: THE DOCKS (Deceptive)
+            path_docks: {
+                text: [
+                    "You ride to the harbor, the smell of salt and rot in the air. The Knight finds a smuggler with a small boat.",
+                    "'Five gold pieces,' the smuggler grins, eyeing your jewelry. 'And the lady's ring.'",
+                    "The Knight nods, but his hand hovers near his dagger."
+                ],
+                choices: [
+                    { label: "Trust the smuggler. Give him the ring.", next: "docks_betrayal" },
+                    { label: "The Knight threatens him instead.", next: "docks_fight" }
+                ]
+            },
+            docks_betrayal: {
+                text: [
+                    "You hand over the ring. The smuggler whistles. From the shadows, the City Watch emerges.",
+                    "'A fine prize,' the Captain says.",
+                    "The Knight pushes you behind him. 'Run, Nadia!'"
+                ],
+                choices: [
+                    { label: "Refuse to leave him.", next: "end_torture" },
+                    { label: "Run into the alleyway.", next: "end_heartbreak" }
+                ]
+            },
+            docks_fight: {
+                 text: [
+                    "The Knight draws his dagger. The smuggler laughs and shouts for the guards.",
+                    "In the chaos, a stray arrow meant for the Knight strikes you instead."
+                 ],
+                 choices: [
+                    { label: "Fall into his arms.", next: "end_death_woman" }
+                 ]
+            },
+
+            // PATH C: THE BLACKWOOD FOREST (The True Path)
+            path_forest: {
+                text: [
+                    "You turn away from the road, plunging into the ancient Blackwood Forest. It is dark, cold, and silent.",
+                    "Branches tear at your dress. The horse stumbles in the thick mud. You have ridden for hours.",
+                    "You hear the howl of wolves nearby. The Knight looks at you. 'We must rest, or the horse will die. But if we stop, the frost might take us.'"
+                ],
+                choices: [
+                    { label: "Push the horse harder. We cannot stop.", next: "forest_fail" },
+                    { label: "Dismount and walk to spare the horse.", next: "forest_success" }
+                ]
+            },
+            forest_fail: {
+                text: [
+                    "You drive the exhausted beast forward. It collapses, breaking its leg.",
+                    "You are stranded in the snow. The wolves draw closer. The cold seeps into your bones.",
+                    "You fall asleep in his arms, never to wake."
+                ],
+                choices: [
+                    { label: "Close your eyes.", next: "end_frozen" }
+                ]
+            },
+            forest_success: {
+                text: [
+                    "You dismount. Hand in hand, you lead the horse through the snow. It is grueling work.",
+                    "Just as dawn breaks, you see it—the ruins of the Old Chapel. A sanctuary forgotten by the King.",
+                    "The Knight builds a fire. He looks at you, dirt on his face, but his eyes shining with hope.",
+                    "'We have nothing,' he says. 'No titles. No gold. No kingdom. Only this fire and each other.'"
+                ],
+                choices: [
+                    { label: "'That is all I ever wanted.'", next: "ROYAL_SEAL" },
+                    { label: "Look back at the way you came.", next: "end_regret" }
+                ]
+            },
+
+            // --- ACT 4: THE LETTER (Alternative Start) ---
+            letter_01: {
+                text: [
+                    "You scribble a note: 'My heart goes with you.' You pay a page boy to run it to him.",
+                    "You watch him read it in the rain. He looks up at your window—a look of utter devastation—before riding into the dark."
+                ],
+                choices: [
+                    { label: "Run to the stables immediately.", next: "chase_fail" },
                     { label: "Turn back to the banquet.", next: "end_duty" }
                 ]
             },
-            chase_horse: {
+            chase_fail: {
                 text: [
-                    "You run until your lungs burn. You reach the courtyard, mud staining your dress.",
+                    "You run until your lungs burn. You reach the courtyard.",
                     "Empty. Only the sound of fading hoofbeats in the rain.",
                     "You were five minutes too late."
                 ],
@@ -229,49 +322,75 @@
                 ]
             },
 
-            // --- PATH: DUTY ---
-            duty_01: {
-                text: [
-                    "You straighten your spine. You are a daughter of Veridia. You do not chase dreams.",
-                    "You turn back to the Prince. He smiles cruelly. 'Finally focused, my dear?'",
-                    "The heavy doors shut, sealing the Knight out, and sealing you in a cage of gold."
-                ],
-                choices: [
-                    { label: "Accept your fate.", next: "end_duty" }
-                ]
+            // --- ENDINGS ---
+            
+            // 1. EXECUTION (King's Road)
+            end_execution: {
+                title: "Ending: The Crimson Dawn",
+                desc: "You were captured. The King showed no mercy for treason. You stood on the scaffold hand in hand with the Knight. The last thing you saw was his eyes, full of love, before the axe fell.",
+                note: "A tragic end to a bold love. Try again."
             },
 
-            // --- ENDINGS ---
+            // 2. TORTURE/PRISON (Docks/Road)
+            end_torture: {
+                title: "Ending: The Iron Cage",
+                desc: "You were dragged back to the castle and forced to marry the Prince. The Knight was thrown into the deepest dungeon. He lives there still, rotting in the dark, whispering your name to the rats.",
+                note: "A fate worse than death. Try again."
+            },
+
+            // 3. HEARTBREAK (Knight Sacrificed)
+            end_heartbreak: {
+                title: "Ending: The Twin Graves",
+                desc: "The Knight stayed behind to fight the guards, buying you time to escape. You heard his final scream. You escaped, but your heart stopped beating that day. You died of grief a month later.",
+                note: "He died for you. You died for him. Try again."
+            },
+
+            // 4. WOMAN DIES (Docks Fight)
+            end_death_woman: {
+                title: "Ending: The Shattered Jewel",
+                desc: "The arrow struck true. You died in the Knight's arms on the dirty docks. Driven mad by grief, he surrendered to the guards, begging for death.",
+                note: "Recklessness leads to ruin. Try again."
+            },
+
+            // 5. FROZEN (Forest Fail)
+            end_frozen: {
+                title: "Ending: Frozen Hearts",
+                desc: "The winter took you both. They found your bodies days later, frozen in an embrace beneath the snow. At least you were together.",
+                note: "Patience is a virtue. Try again."
+            },
+
+            // 6. REGRET (Letter/Hesitation)
             end_regret: {
                 title: "Ending: The Ghost of What If",
-                desc: "The Knight rode away that night. You married the Prince. You lived a life of luxury, but you never smiled truly again. The ghost of the man you loved haunted your halls forever.",
+                desc: "He rode away. You married the Prince. You lived a life of luxury, but you never smiled truly again. The ghost of the man you loved haunted your halls forever.",
                 note: "Regret is a poison. Reweave your fate."
             },
-            end_fear: {
-                title: "Ending: The Golden Cage",
-                desc: "Fear held you back. You stayed safe in your castle, wondering where he went, until your heart turned to dust.",
-                note: "Comfort is the enemy of passion. Try again."
-            },
-            end_coward: {
-                title: "Ending: A Moment's Hesitation",
-                desc: "You pulled away at the last second. The guards found you. The Knight was arrested for touching a noblewoman. You saved his life by banishing him, destroying his soul.",
-                note: "Hesitation kills destiny. Try again."
-            },
+
+            // 7. DUTY (Stay)
             end_duty: {
                 title: "Ending: The Cold Queen",
                 desc: "You became a powerful Queen. Respected, feared, and utterly alone. You died surrounded by gold, whispering a name no one remembered.",
                 note: "Power cannot comfort a lonely soul. Try again."
             },
+
+            // 8. MISSED CHANCE
             end_missed: {
                 title: "Ending: Too Late",
                 desc: "Timing is everything. He died in a foreign war believing you never cared. Fate is cruel to those who wait.",
                 note: "Do not wait. Act. Try again."
             },
             
+            // 9. COWARDICE
+            end_fear: {
+                title: "Ending: The Golden Cage",
+                desc: "Fear held you back. You stayed safe in your castle. He was arrested the next day. You saved his life by banishing him, but you destroyed his soul.",
+                note: "Comfort is the enemy of passion. Try again."
+            },
+            
             // --- HAPPY ENDING ---
             happy_ending: {
                 title: "The True Ending: Freedom",
-                desc: "You sealed the vow. You rode into the night, leaving the crown behind. <br><br>History calls you the 'Lost Queen,' but you were never lost. You lived by the sea with him, growing old in a house filled with warmth.<br><br><b>Two souls, finally one.</b>",
+                desc: "You sealed the vow in the ruins of the chapel. You rode south, leaving the crown behind. <br><br>History calls you the 'Lost Queen,' but you were never lost. You lived by the sea with him, growing old in a house filled with warmth and laughter.<br><br><b>Two souls, finally one.</b>",
                 note: "You found the only path that matters."
             }
         };
@@ -293,7 +412,6 @@
 
             const data = story[nodeId];
 
-            // Fade Out
             contentDiv.style.opacity = '0';
             choiceDiv.style.opacity = '0';
 
@@ -301,7 +419,6 @@
                 scrollContainer.scrollTop = 0;
                 contentDiv.innerHTML = '';
                 
-                // Text Rendering
                 data.text.forEach((para, i) => {
                     const p = document.createElement('p');
                     p.className = `fade-enter delay-${Math.min(i, 3)}`;
@@ -310,7 +427,6 @@
                     contentDiv.appendChild(p);
                 });
 
-                // Choice Rendering
                 choiceDiv.innerHTML = '';
                 data.choices.forEach((choice) => {
                     const btn = document.createElement('button');
@@ -326,13 +442,11 @@
                     choiceDiv.appendChild(btn);
                 });
 
-                // Fade In
                 contentDiv.style.opacity = '1';
                 setTimeout(() => choiceDiv.style.opacity = '1', 600);
             }, 300);
         }
 
-        // --- SEAL LOGIC ---
         function showSealScreen() {
             document.getElementById('screen2').classList.add('hidden-screen');
             document.getElementById('screen3').classList.remove('hidden-screen');
@@ -349,7 +463,7 @@
                 isHolding = true;
 
                 seal.classList.add('pressing');
-                instr.innerText = "Imprinting...";
+                instr.innerText = "Imprinting Vow...";
                 instr.classList.remove('opacity-60', 'animate-pulse');
                 instr.classList.add('text-white');
 
@@ -379,7 +493,6 @@
             seal.addEventListener('mouseleave', endHold);
         }
 
-        // --- ENDING LOGIC ---
         function showEnding(data) {
             document.getElementById('screen2').classList.add('hidden-screen');
             document.getElementById('screen3').classList.add('hidden-screen');
