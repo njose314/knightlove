@@ -3,304 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Crown & The Heart | Propose Day</title>
+    <title>The Crown & The Heart</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
     <style>
         :root { 
             --bg: #030303; 
-            --text-main: #d4d4d4; 
+            --text-main: #e5e5e5; 
             --gold: #c6a87c; 
+            --gold-dim: rgba(198, 168, 124, 0.5);
             --crimson: #8a0a1b; 
-            --parchment: rgba(20, 20, 20, 0.95);
         }
         
         body { 
             background-color: var(--bg); 
             color: var(--text-main); 
             font-family: 'Cormorant Garamond', serif; 
-            overflow-x: hidden; 
+            overflow: hidden; 
             -webkit-tap-highlight-color: transparent;
         }
 
         .font-royal { font-family: 'Cinzel', serif; }
-        .text-gold { color: var(--gold); }
-        .text-crimson { color: var(--crimson); }
         
-        /* Layout & UI */
+        /* Layout Utilities */
+        .h-dvh { height: 100dvh; } 
         .hidden-screen { display: none !important; }
-        .fade-in { animation: fadeIn 1.2s ease-out forwards; }
-        .fade-in-delay { opacity: 0; animation: fadeIn 1.2s ease-out 0.5s forwards; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Animations */
+        .fade-enter { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; transform: translateY(10px); }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.6s; }
+        
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar */
+        .custom-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0a0a0a; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
         /* Button Styling */
         .choice-btn {
-            background: linear-gradient(90deg, transparent 0%, rgba(198, 168, 124, 0.05) 50%, transparent 100%);
-            border: 1px solid rgba(198, 168, 124, 0.2);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(90deg, rgba(198, 168, 124, 0.05) 0%, transparent 100%);
+            border-left: 2px solid var(--gold-dim);
+            transition: all 0.3s ease;
         }
-        .choice-btn::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0; width: 2px;
-            background: var(--gold);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-        .choice-btn:active { background: rgba(198, 168, 124, 0.1); border-color: var(--gold); }
-        .choice-btn:active::before { transform: scaleY(1); }
+        .choice-btn:active { background: rgba(198, 168, 124, 0.15); border-color: var(--gold); transform: translateX(5px); }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-        /* The Wax Seal Animation */
-        #sealContainer { perspective: 1000px; }
-        #waxSeal { 
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .pressing #waxSeal { transform: scale(0.9) rotate(5deg); box-shadow: 0 5px 15px rgba(0,0,0,0.8); }
-        
-        /* Particles */
-        .particle { position: absolute; background: var(--gold); border-radius: 50%; pointer-events: none; opacity: 0; }
+        /* Wax Seal */
+        #waxSeal { transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .pressing #waxSeal { transform: scale(0.9) rotate(2deg); filter: brightness(0.9); }
     </style>
 </head>
 <body>
 
-    <section id="screen1" class="h-screen flex flex-col justify-center items-center p-8 text-center relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/80 to-black pointer-events-none"></div>
+    <section id="screen1" class="h-dvh w-full flex flex-col justify-center items-center p-8 text-center relative bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] bg-fixed">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/80 to-black pointer-events-none"></div>
         
-        <div class="z-10 border-y border-[#c6a87c]/30 py-12 px-6 max-w-lg w-full relative">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#030303] px-4 text-[#c6a87c] text-[10px] uppercase tracking-[0.4em] font-royal">Propose Day Special</div>
-            <h1 class="font-royal text-5xl md:text-7xl text-[#e5e5e5] mb-4 tracking-tight drop-shadow-2xl">The Crown <br><span class="text-3xl md:text-4xl italic font-serif text-[#c6a87c]">&</span><br> The Heart</h1>
-            <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#030303] px-4 text-[#c6a87c] text-[10px] uppercase tracking-[0.3em] font-royal">An Interactive Novel</div>
-        </div>
-        
-        <div class="mt-20 z-10 opacity-0 fade-in-delay">
-            <p class="italic text-lg text-gray-400 mb-8 font-serif">"History is written by kings, <br>but destiny is written by lovers."</p>
-            <button onclick="startGame()" class="group relative px-12 py-4 bg-transparent overflow-hidden rounded-sm transition-all duration-500">
-                <div class="absolute inset-0 w-full h-full bg-[#c6a87c] opacity-0 group-hover:opacity-10 transition-opacity"></div>
-                <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#c6a87c] to-transparent"></div>
-                <div class="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#c6a87c] to-transparent"></div>
-                <span class="font-royal text-sm uppercase tracking-[0.25em] text-[#c6a87c]">Open The Book</span>
+        <div class="z-10 relative space-y-8 fade-enter">
+            <div class="border-y border-[#c6a87c]/30 py-8 px-2">
+                <p class="font-royal text-[10px] uppercase tracking-[0.4em] text-[#c6a87c] mb-4">Propose Day Special</p>
+                <h1 class="font-royal text-5xl md:text-6xl text-[#e5e5e5] tracking-tight leading-tight">
+                    The Crown <br>
+                    <span class="text-3xl italic font-serif text-[#c6a87c] opacity-80">&</span><br>
+                    The Heart
+                </h1>
+            </div>
+            
+            <p class="italic text-lg text-gray-400 font-serif opacity-80 fade-enter delay-1">
+                "A Knight without a name.<br>A Queen without a choice."
+            </p>
+
+            <button onclick="startGame()" class="mt-8 px-10 py-3 border border-[#c6a87c]/40 text-[#c6a87c] font-royal text-xs uppercase tracking-[0.25em] hover:bg-[#c6a87c] hover:text-black transition-all duration-500 fade-enter delay-2">
+                Open The Book
             </button>
         </div>
     </section>
 
-    <section id="screen2" class="h-screen hidden-screen flex flex-col max-w-2xl mx-auto relative bg-[#0a0a0a]">
-        <div class="h-16 flex items-center justify-center border-b border-white/5 bg-[#050505] shrink-0 z-20">
-            <span class="font-royal text-[10px] uppercase tracking-[0.3em] text-[#c6a87c] opacity-60">Chapter: The Forbidden Rain</span>
-        </div>
+    <section id="screen2" class="h-dvh w-full hidden-screen flex flex-col bg-[#050505] relative">
+        <header class="h-16 shrink-0 border-b border-white/5 flex items-center justify-center bg-[#050505] z-20">
+            <span class="font-royal text-[9px] uppercase tracking-[0.3em] text-[#c6a87c] opacity-60">The Chronicle</span>
+        </header>
 
-        <div id="scrollContainer" class="flex-grow overflow-y-auto px-8 py-10 space-y-8 relative scroll-smooth">
-            <div id="storyContent" class="space-y-6 text-xl md:text-2xl leading-relaxed text-gray-300 font-serif"></div>
-            
-            <div class="h-32"></div>
-        </div>
+        <div id="scrollContainer" class="flex-grow custom-scroll relative">
+            <div class="max-w-xl mx-auto min-h-full flex flex-col p-8 pb-12">
+                
+                <div id="storyContent" class="space-y-6 text-xl md:text-2xl leading-relaxed text-gray-300 font-serif mb-12"></div>
 
-        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black via-black to-transparent pt-20 pb-10 px-6 z-30">
-            <div id="choiceContainer" class="space-y-3 max-w-lg mx-auto">
-                </div>
+                <div id="choiceContainer" class="mt-auto space-y-4 pt-8 border-t border-white/5 opacity-0 transition-opacity duration-700"></div>
+            </div>
         </div>
     </section>
 
-    <section id="screen3" class="h-screen hidden-screen flex flex-col justify-center items-center p-8 text-center bg-black relative">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#3d000a,transparent_60%)] opacity-40 pointer-events-none"></div>
+    <section id="screen3" class="h-dvh w-full hidden-screen flex flex-col justify-center items-center p-8 text-center bg-black relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#3d000a,transparent_70%)] opacity-30 pointer-events-none"></div>
         
-        <div class="z-10 space-y-4 mb-12 fade-in">
-            <h2 class="font-royal text-3xl text-[#c6a87c]">The Vow of Eternity</h2>
+        <div class="z-10 space-y-6 mb-16 fade-enter">
+            <h2 class="font-royal text-2xl md:text-3xl text-[#c6a87c]">The Covenant</h2>
             <p class="font-serif text-xl text-gray-400 italic max-w-md mx-auto leading-relaxed">
-                "By this seal, I renounce all fear. I choose you, Nicholas, above my station, above my family, and above my life."
+                "I renounce the crown. I choose the man."
             </p>
         </div>
 
-        <div id="sealContainer" class="relative group cursor-pointer z-10 tap-target">
-            <div id="waxSeal" class="w-48 h-48 rounded-full bg-gradient-to-br from-[#8a0a1b] to-[#52020d] flex items-center justify-center relative border-[6px] border-[#3d020a] shadow-2xl">
-                <div class="w-36 h-36 rounded-full border border-[#a31a2c] flex items-center justify-center opacity-80">
-                    <div class="text-center transform rotate-[-5deg]">
-                        <span class="font-royal text-6xl text-[#3d020a] drop-shadow-md block">N</span>
-                        <span class="font-serif text-2xl text-[#3d020a] -mt-2 block">& N</span>
-                    </div>
+        <div id="sealContainer" class="relative group cursor-pointer z-10 select-none fade-enter delay-1">
+            <div id="waxSeal" class="w-56 h-56 rounded-full bg-gradient-to-br from-[#8a0a1b] to-[#4a0208] flex items-center justify-center relative border-[6px] border-[#2e0105] shadow-2xl">
+                <div class="w-44 h-44 rounded-full border border-[#b8233a]/30 flex flex-col items-center justify-center opacity-90 p-4">
+                    <span class="font-royal text-sm text-[#3d020a] drop-shadow-md uppercase tracking-[0.2em] mb-1">Two Souls</span>
+                    <div class="h-[1px] w-12 bg-[#3d020a] opacity-50 my-1"></div>
+                    <span class="font-royal text-sm text-[#3d020a] drop-shadow-md uppercase tracking-[0.2em] mt-1">Now One</span>
                 </div>
-                <div class="absolute top-4 left-8 w-12 h-6 bg-white opacity-10 rounded-full blur-md"></div>
+                <div class="absolute top-8 left-12 w-16 h-8 bg-white opacity-5 rounded-full blur-xl"></div>
             </div>
-            
-            <div class="absolute inset-0 rounded-full border border-[#8a0a1b] animate-ping opacity-20"></div>
         </div>
 
-        <div class="mt-16 z-10 fade-in-delay">
-            <div class="h-[1px] w-32 bg-[#c6a87c] mx-auto opacity-30 mb-4"></div>
-            <p id="sealInstruction" class="font-royal text-[10px] uppercase tracking-[0.3em] text-[#c6a87c] opacity-70">Press & Hold to Seal the Vow</p>
+        <div class="mt-12 z-10 fade-enter delay-2">
+            <p id="sealInstruction" class="font-royal text-[10px] uppercase tracking-[0.3em] text-[#c6a87c] opacity-60 animate-pulse">
+                Press & Hold to Seal
+            </p>
         </div>
     </section>
 
-    <section id="screen4" class="h-screen hidden-screen flex flex-col justify-center items-center p-8 text-center bg-[#050505]">
-        <div class="border border-[#c6a87c]/20 p-8 md:p-12 max-w-lg w-full relative bg-[#0a0a0a] shadow-2xl fade-in">
-            <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-[#c6a87c] opacity-50"></div>
-            <div class="absolute top-2 right-2 w-4 h-4 border-t border-r border-[#c6a87c] opacity-50"></div>
-            <div class="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-[#c6a87c] opacity-50"></div>
-            <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-[#c6a87c] opacity-50"></div>
+    <section id="screen4" class="h-dvh w-full hidden-screen flex flex-col justify-center items-center p-6 bg-[#030303] relative">
+        <div class="border border-[#c6a87c]/20 bg-[#080808] p-10 max-w-md w-full text-center shadow-2xl relative fade-enter">
+            <span class="absolute top-2 left-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌜</span>
+            <span class="absolute top-2 right-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌝</span>
+            <span class="absolute bottom-2 left-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌞</span>
+            <span class="absolute bottom-2 right-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌟</span>
 
-            <h1 id="endTitle" class="font-royal text-2xl md:text-4xl mb-6 text-[#c6a87c] leading-tight"></h1>
-            <p id="endDesc" class="font-serif text-lg md:text-xl text-gray-300 leading-relaxed mb-8"></p>
+            <h1 id="endTitle" class="font-royal text-2xl text-[#c6a87c] mb-6 leading-tight"></h1>
+            <p id="endDesc" class="font-serif text-lg text-gray-300 leading-relaxed mb-8 opacity-90"></p>
             
-            <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6"></div>
+            <div class="h-px w-16 bg-[#c6a87c]/30 mx-auto mb-6"></div>
             
-            <p id="endNote" class="font-royal text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-8"></p>
+            <p id="endNote" class="font-royal text-[9px] uppercase tracking-[0.2em] text-gray-500 mb-8"></p>
             
-            <button onclick="resetGame()" class="text-[#c6a87c] border-b border-[#c6a87c]/50 pb-1 hover:text-white hover:border-white transition-colors font-royal text-xs tracking-widest uppercase">
-                Attempt Fate Again
+            <button onclick="resetGame()" class="text-[#c6a87c] text-xs font-royal uppercase tracking-widest border-b border-[#c6a87c]/30 pb-1 hover:text-white hover:border-white transition-colors">
+                Rewrite Destiny
             </button>
         </div>
     </section>
 
     <script>
-        // --- THE NOVEL ENGINE (DATA) ---
-        // Every 'next' key corresponds to a key in this object.
+        // --- NARRATIVE DATABASE ---
         const story = {
             start: {
                 text: [
-                    "The year is 1426. The Kingdom of Veridia is drowning in a relentless storm.",
-                    "Inside the Great Hall, the music is too loud, the wine too sweet, and the laughter of the nobles too sharp. They celebrate your betrothal to Prince Valerius—a man whose heart is as cold as the marble beneath your feet.",
-                    "But your eyes are not on the Prince. They are fixed on the shadow near the heavy oak doors.",
-                    "Sir Nicholas. Your father's sworn sword. A man of no title, no land, and no right to look at you the way he does.",
-                    "He turns to leave, his cloak swirling around him, heading into the rain."
+                    "The year is 1426. The Kingdom of Veridia is drowning in a storm.",
+                    "The Great Hall is filled with music and laughter, celebrating your betrothal to a Prince you do not love—a man with a crown of gold and a heart of ice.",
+                    "But your eyes are not on the Prince. They are fixed on the shadowed figure standing near the heavy oak doors.",
+                    "The Knight. Your father's sworn sword. A man of no title, no land, and no right to look at you the way he does.",
+                    "He turns to leave, his cape swirling around him, stepping out into the relentless rain."
                 ],
                 choices: [
                     { label: "Slip away to the gardens to stop him.", next: "garden_01" },
-                    { label: "Stay. Duty is the chain you must wear.", next: "duty_01" },
-                    { label: "Send a servant with a secret letter.", next: "letter_01" }
+                    { label: "Stay. A Queen does not chase shadows.", next: "duty_01" },
+                    { label: "Send a page with a secret letter.", next: "letter_01" }
                 ]
             },
 
-            // --- BRANCH: THE GARDEN (Romance Path) ---
+            // --- PATH: THE GARDEN ---
             garden_01: {
                 text: [
-                    "You gather your silk skirts and slip through the servants' passage. The cold rain hits your skin like needles, but the heat in your chest drives you forward.",
-                    "You find him near the old stone fountain. He is mounting his horse, his face grim.",
-                    "'Nicholas!' you cry out.",
-                    "He freezes. Slowly, he turns. The rain has plastered his dark hair to his forehead. His eyes are wide with terror and longing.",
-                    "'My Lady? You... you cannot be here. If the Duke sees us, it is my head on a pike.'"
+                    "You slip through the servants' passage, silk skirts trailing in the mud. The rain hits your skin like needles.",
+                    "You find him near the stables, mounting his black steed. He freezes as you approach.",
+                    "'My Lady?' His voice is rough, like stone grinding on stone. 'You cannot be here. If the Duke sees us, it is my head on a pike.'"
                 ],
                 choices: [
-                    { label: "Touch his hand. 'I do not care.'", next: "garden_touch" },
+                    { label: "Reach for his hand. 'I do not care.'", next: "garden_touch" },
                     { label: "Beg him to take you away.", next: "garden_run" },
                     { label: "Hesitate. 'I just wanted to say goodbye.'", next: "end_regret" }
                 ]
             },
             garden_touch: {
                 text: [
-                    "You reach out. Your trembling fingers brush his leather gauntlet. He flinches, then succumbs, covering your small hand with his large, rough one.",
-                    "'Nadia,' he whispers—the first time he has ever dared to use your name without a title.",
-                    "'This world was not made for us,' he says, his voice breaking. 'I am a sword to be used and discarded. You are a jewel to be sold for an alliance.'"
+                    "You reach out. Your trembling fingers brush his leather gauntlet. He flinches, then succumbs, covering your hand with his.",
+                    "He looks at you with a treasonous intimacy.",
+                    "'This world was not made for us,' he says. 'I am a sword to be used and discarded. You are a jewel to be sold for an alliance. We can never be.'"
                 ],
                 choices: [
-                    { label: "'Then let us break the world.'", next: "garden_kiss" },
-                    { label: "'I am afraid, Nicholas.'", next: "end_fear" }
+                    { label: "'Then let us break this world.'", next: "garden_kiss" },
+                    { label: "Pull back in fear.", next: "end_fear" }
                 ]
             },
             garden_run: {
                 text: [
-                    "'Take me away,' you plead. 'To the North. To the sea. Anywhere but here.'",
-                    "Nicholas looks at the castle, then at you. A war wages behind his eyes. Duty against Love.",
-                    "He shakes his head. 'I cannot. You would freeze within a day. I have no home to offer you, only a saddle and a sword. I love you too much to make you a beggar.'"
+                    "'Take me away,' you plead. 'Anywhere but here.'",
+                    "The Knight looks at you with agonizing love. 'I have no home to offer you, My Queen. Only a saddle and a sword. I love you too much to make you a beggar.'"
                 ],
                 choices: [
-                    { label: "'I would rather be a beggar with you than a Queen alone.'", next: "garden_kiss" },
+                    { label: "'I would rather be a beggar with you.'", next: "garden_kiss" },
                     { label: "Realize he is right and let him go.", next: "end_regret" }
                 ]
             },
             garden_kiss: {
                 text: [
-                    "The distance between you vanishes. Nicholas pulls you close, his armor cold against your chest, but his lips burning with a desperate heat.",
-                    "It is a kiss of rebellion. A kiss that treason.",
-                    "When you pull apart, he looks at you with a new resolve. 'If we do this, there is no going back. We leave tonight. We ride for the old ruins at Blackwood. We will be hunted.'",
+                    "The distance vanishes. He pulls you close, his armor cold against your chest, his kiss burning with a desperate heat.",
+                    "When you pull apart, his eyes are steel. 'If we do this, there is no going back. We ride for the Blackwood ruins tonight. We will be hunted.'",
                     "'Are you sure, my Queen?'"
                 ],
                 choices: [
                     { label: "Swear your life to him.", next: "ROYAL_SEAL" },
-                    { label: "The fear of death stops you.", next: "end_coward" }
+                    { label: "Falster at the thought of being hunted.", next: "end_coward" }
                 ]
             },
 
-            // --- BRANCH: THE LETTER (Tragic Path) ---
+            // --- PATH: THE LETTER ---
             letter_01: {
                 text: [
-                    "You cannot risk the scandal. You pen a hasty note on a napkin: 'My heart goes with you, though my body must stay.'",
-                    "You watch from the balcony as a page boy hands it to him.",
-                    "Nicholas reads it in the rain. His shoulders slump. He does not look up. He knows, as you do, that this is the end.",
-                    "He mounts his horse and rides into the dark, vanishing like a ghost."
+                    "You scribble a hasty note: 'My heart goes with you.' You pay a page boy to run it to him.",
+                    "From the balcony, you watch him read it in the rain. His shoulders slump. He looks up at your window once—a look of utter devastation—before riding into the dark."
                 ],
                 choices: [
-                    { label: "Run to the stables! It's not too late!", next: "chase_horse" },
+                    { label: "Run to the stables immediately.", next: "chase_horse" },
                     { label: "Turn back to the banquet.", next: "end_duty" }
                 ]
             },
             chase_horse: {
                 text: [
-                    "You run. You ignore the mud ruining your shoes. You reach the stables, gasping for air.",
-                    "But the stall is empty. The hoofprints are already filling with water.",
-                    "He is gone. You were five minutes too late."
+                    "You run until your lungs burn. You reach the courtyard, mud staining your dress.",
+                    "Empty. Only the sound of fading hoofbeats in the rain.",
+                    "You were five minutes too late."
                 ],
                 choices: [
                     { label: "Collapse and weep.", next: "end_missed" }
                 ]
             },
 
-            // --- BRANCH: DUTY (Cold Path) ---
+            // --- PATH: DUTY ---
             duty_01: {
                 text: [
-                    "You straighten your spine. You are a daughter of the House of Veridia. You do not chase servants.",
-                    "You turn back to Prince Valerius. He smiles, a thin, cruel expression. 'Finally focused, my dear?'",
-                    "The doors shut. The sound of Nicholas's horse fades. You have chosen safety. You have chosen gold."
+                    "You straighten your spine. You are a daughter of Veridia. You do not chase dreams.",
+                    "You turn back to the Prince. He smiles cruelly. 'Finally focused, my dear?'",
+                    "The heavy doors shut, sealing the Knight out, and sealing you in a cage of gold."
                 ],
                 choices: [
-                    { label: "Accept your fate.", next: "end_duty" },
-                    { label: "Drink wine to forget.", next: "end_duty" }
+                    { label: "Accept your fate.", next: "end_duty" }
                 ]
             },
 
             // --- ENDINGS ---
             end_regret: {
                 title: "Ending: The Ghost of What If",
-                desc: "Nicholas rode away that night. You married the Prince. Years later, you heard tales of a wandering knight who fought with reckless abandon, as if he sought death. You lived a long life, but you never smiled truly again.",
-                note: "Regret is a poison. Try again."
+                desc: "The Knight rode away that night. You married the Prince. You lived a life of luxury, but you never smiled truly again. The ghost of the man you loved haunted your halls forever.",
+                note: "Regret is a poison. Reweave your fate."
             },
             end_fear: {
                 title: "Ending: The Golden Cage",
-                desc: "Fear held you back. You stayed in the castle. You had silk, servants, and safety. But every time it rained, you stood by the window, waiting for a rider who never returned.",
-                note: "Courage is the price of love. Try again."
+                desc: "Fear held you back. You stayed safe in your castle, wondering where he went, until your heart turned to dust.",
+                note: "Comfort is the enemy of passion. Try again."
             },
             end_coward: {
                 title: "Ending: A Moment's Hesitation",
-                desc: "You pulled away at the last second. The guards found you. Nicholas was arrested for touching a noblewoman. You begged for his life, and he was banished. You saved him, but you destroyed him.",
-                note: "Hesitation kills destiny. Reweave your fate."
+                desc: "You pulled away at the last second. The guards found you. The Knight was arrested for touching a noblewoman. You saved his life by banishing him, destroying his soul.",
+                note: "Hesitation kills destiny. Try again."
             },
             end_duty: {
                 title: "Ending: The Cold Queen",
-                desc: "You became the Queen of Veridia. You were powerful, respected, and feared. But your heart turned to ice. You died surrounded by gold, yet utterly alone.",
+                desc: "You became a powerful Queen. Respected, feared, and utterly alone. You died surrounded by gold, whispering a name no one remembered.",
                 note: "Power cannot comfort a lonely soul. Try again."
             },
             end_missed: {
                 title: "Ending: Too Late",
-                desc: "You realized your mistake too late. The timing of fate is cruel. Nicholas never knew you came for him. He died believing you didn't care.",
+                desc: "Timing is everything. He died in a foreign war believing you never cared. Fate is cruel to those who wait.",
                 note: "Do not wait. Act. Try again."
             },
             
             // --- HAPPY ENDING ---
             happy_ending: {
-                title: "The True Ending: A Life of Freedom",
-                desc: "You sealed the vow. You rode into the night, leaving the crown behind. <br><br>History calls you the 'Lost Lady,' but you were never lost. You lived in a small cottage by the sea with Nicholas. You worked the earth, you aged together, and you were free.<br><br><b>Happy Propose Day, My Queen.</b>",
+                title: "The True Ending: Freedom",
+                desc: "You sealed the vow. You rode into the night, leaving the crown behind. <br><br>History calls you the 'Lost Queen,' but you were never lost. You lived by the sea with him, growing old in a house filled with warmth.<br><br><b>Two souls, finally one.</b>",
                 note: "You found the only path that matters."
             }
         };
 
-        // --- GAME LOGIC ---
+        // --- GAME ENGINE ---
+        const scrollContainer = document.getElementById('scrollContainer');
+        const contentDiv = document.getElementById('storyContent');
+        const choiceDiv = document.getElementById('choiceContainer');
+
         function startGame() {
             document.getElementById('screen1').classList.add('hidden-screen');
             document.getElementById('screen2').classList.remove('hidden-screen');
@@ -308,76 +288,59 @@
         }
 
         function loadNode(nodeId) {
-            // SPECIAL CHECK: WIN CONDITION
-            if (nodeId === 'ROYAL_SEAL') {
-                showSealScreen();
-                return;
-            }
-            // SPECIAL CHECK: ENDINGS
-            if (nodeId.startsWith('end_')) {
-                showEnding(story[nodeId]);
-                return;
-            }
+            if (nodeId === 'ROYAL_SEAL') return showSealScreen();
+            if (nodeId.startsWith('end_')) return showEnding(story[nodeId]);
 
             const data = story[nodeId];
-            const contentDiv = document.getElementById('storyContent');
-            const choiceDiv = document.getElementById('choiceContainer');
-            const scrollContainer = document.getElementById('scrollContainer');
 
-            // 1. Clear previous choices
-            choiceDiv.innerHTML = '';
-            choiceDiv.classList.add('opacity-0');
+            // Fade Out
+            contentDiv.style.opacity = '0';
+            choiceDiv.style.opacity = '0';
 
-            // 2. Append text blocks one by one (Typing/Fade effect)
-            contentDiv.innerHTML = ''; // Clear old text for a new "chapter" feel or keep it for continuous scroll? 
-            // *Design Decision: Clear text to focus on the scene*
-            
-            let delay = 0;
-            data.text.forEach((paragraph, index) => {
-                setTimeout(() => {
-                    const p = document.createElement('p');
-                    p.className = 'fade-in';
-                    p.innerHTML = paragraph;
-                    contentDiv.appendChild(p);
-                    
-                    // Auto scroll to bottom
-                    scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
-                }, delay);
-                delay += 800; // Delay between paragraphs
-            });
-
-            // 3. Show choices after text finishes
             setTimeout(() => {
-                data.choices.forEach(choice => {
+                scrollContainer.scrollTop = 0;
+                contentDiv.innerHTML = '';
+                
+                // Text Rendering
+                data.text.forEach((para, i) => {
+                    const p = document.createElement('p');
+                    p.className = `fade-enter delay-${Math.min(i, 3)}`;
+                    p.style.animationDelay = `${i * 0.15}s`;
+                    p.innerText = para;
+                    contentDiv.appendChild(p);
+                });
+
+                // Choice Rendering
+                choiceDiv.innerHTML = '';
+                data.choices.forEach((choice) => {
                     const btn = document.createElement('button');
-                    btn.className = "choice-btn w-full py-4 px-6 text-left group";
+                    btn.className = "choice-btn w-full py-5 px-6 text-left group flex items-center";
                     btn.innerHTML = `
-                        <div class="flex items-center">
-                            <span class="font-royal text-[#c6a87c] mr-4 text-xl">❖</span>
-                            <span class="font-serif text-lg text-gray-300 group-hover:text-white transition-colors">${choice.label}</span>
-                        </div>
+                        <span class="font-royal text-[#c6a87c] mr-4 text-sm opacity-60 group-hover:opacity-100 transition-opacity">◇</span>
+                        <span class="font-serif text-lg text-gray-300 group-hover:text-white transition-colors">${choice.label}</span>
                     `;
                     btn.onclick = () => {
-                        if (navigator.vibrate) navigator.vibrate(20);
+                        if (navigator.vibrate) navigator.vibrate(10);
                         loadNode(choice.next);
                     };
                     choiceDiv.appendChild(btn);
                 });
-                choiceDiv.classList.remove('opacity-0');
-                choiceDiv.classList.add('fade-in');
-                scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
-            }, delay + 500);
+
+                // Fade In
+                contentDiv.style.opacity = '1';
+                setTimeout(() => choiceDiv.style.opacity = '1', 600);
+            }, 300);
         }
 
-        // --- SEAL MECHANIC ---
+        // --- SEAL LOGIC ---
         function showSealScreen() {
             document.getElementById('screen2').classList.add('hidden-screen');
             document.getElementById('screen3').classList.remove('hidden-screen');
-
+            
             const seal = document.getElementById('sealContainer');
             const wax = document.getElementById('waxSeal');
             const instr = document.getElementById('sealInstruction');
-            let timer;
+            let holdTimer;
             let isHolding = false;
 
             const startHold = (e) => {
@@ -386,24 +349,27 @@
                 isHolding = true;
 
                 seal.classList.add('pressing');
-                instr.innerText = "Imprinting Vow...";
-                instr.style.color = "#c6a87c";
+                instr.innerText = "Imprinting...";
+                instr.classList.remove('opacity-60', 'animate-pulse');
+                instr.classList.add('text-white');
 
-                timer = setTimeout(() => {
+                holdTimer = setTimeout(() => {
                     if (navigator.vibrate) navigator.vibrate([50, 50, 200]);
                     instr.innerText = "Vow Accepted";
                     instr.classList.add('text-[#8a0a1b]');
                     wax.style.transform = "scale(1)";
-                    setTimeout(() => showEnding(story.happy_ending), 1000);
-                }, 2000); // 2 seconds hold
+                    setTimeout(() => showEnding(story.happy_ending), 1500);
+                }, 2000);
             };
 
             const endHold = () => {
                 if(!isHolding) return;
                 isHolding = false;
-                clearTimeout(timer);
+                clearTimeout(holdTimer);
                 seal.classList.remove('pressing');
-                instr.innerText = "Press & Hold to Seal the Vow";
+                instr.innerText = "Press & Hold to Seal";
+                instr.classList.add('opacity-60', 'animate-pulse');
+                instr.classList.remove('text-white');
             };
 
             seal.addEventListener('touchstart', startHold);
@@ -413,8 +379,9 @@
             seal.addEventListener('mouseleave', endHold);
         }
 
-        // --- ENDING SCREEN ---
+        // --- ENDING LOGIC ---
         function showEnding(data) {
+            document.getElementById('screen2').classList.add('hidden-screen');
             document.getElementById('screen3').classList.add('hidden-screen');
             document.getElementById('screen4').classList.remove('hidden-screen');
             
