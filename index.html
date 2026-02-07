@@ -19,7 +19,7 @@
             background-color: var(--bg); 
             color: var(--text-main); 
             font-family: 'Cormorant Garamond', serif; 
-            overflow: hidden; /* App handles scrolling internal containers */
+            overflow: hidden; 
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -71,7 +71,7 @@
             </div>
             
             <p class="italic text-lg text-gray-400 font-serif opacity-80 fade-enter delay-1">
-                "A Knight without a name.<br>A Queen without a choice."
+                "Many paths lead to ruin.<br>Only one leads to us."
             </p>
 
             <button onclick="startGame()" class="mt-8 px-10 py-3 border border-[#c6a87c]/40 text-[#c6a87c] font-royal text-xs uppercase tracking-[0.25em] hover:bg-[#c6a87c] hover:text-black transition-all duration-500 fade-enter delay-2">
@@ -101,7 +101,7 @@
         <div class="z-10 space-y-6 mb-16 fade-enter">
             <h2 class="font-royal text-2xl md:text-3xl text-[#c6a87c]">The Covenant</h2>
             <p class="font-serif text-xl text-gray-400 italic max-w-md mx-auto leading-relaxed">
-                "I renounce the crown. I choose the man."
+                "Against the world, against the odds, I choose you."
             </p>
         </div>
 
@@ -248,7 +248,7 @@
                 text: [
                     "You hand over the ring. The smuggler whistles. From the shadows, the City Watch emerges.",
                     "'A fine prize,' the Captain says.",
-                    "The Knight pushes you behind him. 'Run, my Lady!'"
+                    "The Knight pushes you behind him. 'Run, Nadia!'"
                 ],
                 choices: [
                     { label: "Refuse to leave him.", next: "end_torture" },
