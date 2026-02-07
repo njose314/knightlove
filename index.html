@@ -19,20 +19,21 @@
             background-color: var(--bg); 
             color: var(--text-main); 
             font-family: 'Cormorant Garamond', serif; 
-            overflow: hidden; 
+            overflow: hidden; /* Critical for App-like feel */
             -webkit-tap-highlight-color: transparent;
         }
 
         .font-royal { font-family: 'Cinzel', serif; }
         
-        /* Layout Utilities */
-        .h-dvh { height: 100dvh; } 
+        /* Mobile Viewport Fixes */
+        .h-dvh { height: 100vh; height: 100dvh; } 
         .hidden-screen { display: none !important; }
         
-        /* Animations */
+        /* Text Fade Animations */
         .fade-enter { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; transform: translateY(10px); }
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.6s; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.3s; }
+        .delay-3 { animation-delay: 0.5s; }
         
         @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
 
@@ -42,15 +43,15 @@
         .custom-scroll::-webkit-scrollbar-track { background: #0a0a0a; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
-        /* Button Styling */
+        /* Choice Button Styling */
         .choice-btn {
             background: linear-gradient(90deg, rgba(198, 168, 124, 0.05) 0%, transparent 100%);
             border-left: 2px solid var(--gold-dim);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         .choice-btn:active { background: rgba(198, 168, 124, 0.15); border-color: var(--gold); transform: translateX(5px); }
 
-        /* Wax Seal */
+        /* Wax Seal Animation */
         #waxSeal { transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
         .pressing #waxSeal { transform: scale(0.9) rotate(2deg); filter: brightness(0.9); }
     </style>
@@ -70,27 +71,29 @@
                 </h1>
             </div>
             
-            <p class="italic text-lg text-gray-400 font-serif opacity-80 fade-enter delay-1">
-                "Many paths lead to ruin.<br>Only one leads to us."
+            <p class="italic text-lg text-gray-400 font-serif opacity-80 fade-enter delay-2">
+                "A Knight without a name.<br>A Queen without a choice."
             </p>
 
-            <button onclick="startGame()" class="mt-8 px-10 py-3 border border-[#c6a87c]/40 text-[#c6a87c] font-royal text-xs uppercase tracking-[0.25em] hover:bg-[#c6a87c] hover:text-black transition-all duration-500 fade-enter delay-2">
+            <button onclick="startGame()" class="mt-8 px-10 py-4 border border-[#c6a87c]/40 text-[#c6a87c] font-royal text-xs uppercase tracking-[0.25em] active:bg-[#c6a87c] active:text-black transition-all duration-300 fade-enter delay-3">
                 Open The Book
             </button>
         </div>
     </section>
 
     <section id="screen2" class="h-dvh w-full hidden-screen flex flex-col bg-[#050505] relative">
-        <header class="h-16 shrink-0 border-b border-white/5 flex items-center justify-center bg-[#050505] z-20">
+        <header class="h-16 shrink-0 border-b border-white/5 flex items-center justify-center bg-[#050505] z-20 shadow-lg">
             <span class="font-royal text-[9px] uppercase tracking-[0.3em] text-[#c6a87c] opacity-60">The Chronicle</span>
         </header>
 
         <div id="scrollContainer" class="flex-grow custom-scroll relative">
             <div class="max-w-xl mx-auto min-h-full flex flex-col p-8 pb-12">
                 
-                <div id="storyContent" class="space-y-6 text-xl md:text-2xl leading-relaxed text-gray-300 font-serif mb-12"></div>
+                <div id="storyContent" class="space-y-6 text-xl md:text-2xl leading-relaxed text-gray-300 font-serif mb-12">
+                    </div>
 
-                <div id="choiceContainer" class="mt-auto space-y-4 pt-8 border-t border-white/5 opacity-0 transition-opacity duration-700"></div>
+                <div id="choiceContainer" class="mt-auto space-y-4 pt-8 border-t border-white/5 opacity-0 transition-opacity duration-700">
+                    </div>
             </div>
         </div>
     </section>
@@ -101,7 +104,7 @@
         <div class="z-10 space-y-6 mb-16 fade-enter">
             <h2 class="font-royal text-2xl md:text-3xl text-[#c6a87c]">The Covenant</h2>
             <p class="font-serif text-xl text-gray-400 italic max-w-md mx-auto leading-relaxed">
-                "Against the world, against the odds, I choose you."
+                "I renounce the crown. I choose the man."
             </p>
         </div>
 
@@ -157,7 +160,7 @@
                 ],
                 choices: [
                     { label: "Slip away to the gardens to stop him.", next: "garden_01" },
-                    { label: "Stay. A Queen does not chase shadows.", next: "end_duty" },
+                    { label: "Stay. A Queen does not chase shadows.", next: "duty_01" },
                     { label: "Send a page with a secret letter.", next: "letter_01" }
                 ]
             },
@@ -248,7 +251,7 @@
                 text: [
                     "You hand over the ring. The smuggler whistles. From the shadows, the City Watch emerges.",
                     "'A fine prize,' the Captain says.",
-                    "The Knight pushes you behind him. 'Run, Nadia!'"
+                    "The Knight pushes you behind him. 'Run, my Lady!'"
                 ],
                 choices: [
                     { label: "Refuse to leave him.", next: "end_torture" },
@@ -322,51 +325,63 @@
                 ]
             },
 
+            // --- PATH: DUTY (FIXED) ---
+            duty_01: {
+                text: [
+                    "You straighten your spine. You are a daughter of Veridia. You do not chase dreams.",
+                    "You turn back to the Prince. He smiles cruelly. 'Finally focused, my dear?'",
+                    "The heavy doors shut, sealing the Knight out, and sealing you in a cage of gold."
+                ],
+                choices: [
+                    { label: "Accept your fate.", next: "end_duty" }
+                ]
+            },
+
             // --- ENDINGS ---
             
-            // 1. EXECUTION (King's Road)
+            // 1. EXECUTION
             end_execution: {
                 title: "Ending: The Crimson Dawn",
                 desc: "You were captured. The King showed no mercy for treason. You stood on the scaffold hand in hand with the Knight. The last thing you saw was his eyes, full of love, before the axe fell.",
                 note: "A tragic end to a bold love. Try again."
             },
 
-            // 2. TORTURE/PRISON (Docks/Road)
+            // 2. TORTURE/PRISON
             end_torture: {
                 title: "Ending: The Iron Cage",
                 desc: "You were dragged back to the castle and forced to marry the Prince. The Knight was thrown into the deepest dungeon. He lives there still, rotting in the dark, whispering your name to the rats.",
                 note: "A fate worse than death. Try again."
             },
 
-            // 3. HEARTBREAK (Knight Sacrificed)
+            // 3. HEARTBREAK
             end_heartbreak: {
                 title: "Ending: The Twin Graves",
                 desc: "The Knight stayed behind to fight the guards, buying you time to escape. You heard his final scream. You escaped, but your heart stopped beating that day. You died of grief a month later.",
                 note: "He died for you. You died for him. Try again."
             },
 
-            // 4. WOMAN DIES (Docks Fight)
+            // 4. WOMAN DIES
             end_death_woman: {
                 title: "Ending: The Shattered Jewel",
                 desc: "The arrow struck true. You died in the Knight's arms on the dirty docks. Driven mad by grief, he surrendered to the guards, begging for death.",
                 note: "Recklessness leads to ruin. Try again."
             },
 
-            // 5. FROZEN (Forest Fail)
+            // 5. FROZEN
             end_frozen: {
                 title: "Ending: Frozen Hearts",
                 desc: "The winter took you both. They found your bodies days later, frozen in an embrace beneath the snow. At least you were together.",
                 note: "Patience is a virtue. Try again."
             },
 
-            // 6. REGRET (Letter/Hesitation)
+            // 6. REGRET
             end_regret: {
                 title: "Ending: The Ghost of What If",
                 desc: "He rode away. You married the Prince. You lived a life of luxury, but you never smiled truly again. The ghost of the man you loved haunted your halls forever.",
                 note: "Regret is a poison. Reweave your fate."
             },
 
-            // 7. DUTY (Stay)
+            // 7. DUTY
             end_duty: {
                 title: "Ending: The Cold Queen",
                 desc: "You became a powerful Queen. Respected, feared, and utterly alone. You died surrounded by gold, whispering a name no one remembered.",
@@ -463,7 +478,7 @@
                 isHolding = true;
 
                 seal.classList.add('pressing');
-                instr.innerText = "Imprinting Vow...";
+                instr.innerText = "Imprinting...";
                 instr.classList.remove('opacity-60', 'animate-pulse');
                 instr.classList.add('text-white');
 
