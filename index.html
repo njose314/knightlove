@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Propose Day Special | The Vow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root { --crimson: #8a0a1b; --gold: #c5a059; --bg: #050505; --paper: rgba(255, 253, 208, 0.05); }
+        body { background: var(--bg); color: #e5e5e5; font-family: 'Lora', serif; overflow-x: hidden; touch-action: manipulation; }
+        .title-font { font-family: 'Cinzel', serif; }
+        .hidden-screen { display: none !important; }
+        
+        /* UI Elements */
+        .parchment { background: var(--paper); border: 1px solid rgba(197, 160, 89, 0.2); backdrop-filter: blur(5px); box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        .gold-glow { text-shadow: 0 0 10px rgba(197, 160, 89, 0.3); }
+        .crimson-text { color: var(--crimson); }
+        
+        /* Animations */
+        @keyframes fadePulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .pulse-anim { animation: fadePulse 3s infinite; }
+        
+        /* Buttons */
+        .choice-btn { 
+            background: linear-gradient(to right, transparent 50%, rgba(138, 10, 27, 0.1) 50%); 
+            background-size: 200% 100%; 
+            transition: all 0.4s ease; 
+            border-left: 2px solid var(--gold);
+        }
+        .choice-btn:active { background-position: -100% 0; border-color: var(--crimson); }
+        
+        /* Seal Animation */
+        #waxSeal { transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .sealing #waxSeal { transform: scale(0.9); opacity: 0.8; }
+        .sealed-anim { animation: sealPress 0.4s forwards; }
+        @keyframes sealPress { 0% { transform: scale(1); } 50% { transform: scale(0.8); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <section id="screen1" class="min-h-screen flex flex-col justify-center items-center p-8 text-center relative">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(138,10,27,0.1),transparent_70%)] pointer-events-none"></div>
+        
+        <div class="space-y-6 z-10 border-y border-[#c5a059]/30 py-10 w-full max-w-md">
+            <p class="text-xs tracking-[0.4em] uppercase text-[#c5a059]">Propose Day Special</p>
+            <h1 class="title-font text-5xl md:text-6xl text-[#e5e5e5] gold-glow">The Vow</h1>
+            <p class="text-xs uppercase tracking-widest opacity-50">An Interactive Tale of Nicholas & Nadia</p>
+        </div>
+        
+        <div class="mt-16 z-10">
+            <p class="italic opacity-60 mb-6 text-sm">"Every choice echoes in eternity, my Queen."</p>
+            <button onclick="startStory()" class="border border-[#c5a059] text-[#c5a059] px-10 py-3 title-font text-sm tracking-widest hover:bg-[#c5a059] hover:text-black transition-colors duration-500">
+                Turn the Page
+            </button>
+        </div>
+    </section>
+
+    <section id="screen2" class="min-h-screen hidden-screen flex flex-col p-6 max-w-2xl mx-auto relative">
+        <div class="flex justify-center items-center py-4 opacity-40">
+            <div class="h-[1px] w-12 bg-[#c5a059]"></div>
+            <span class="px-4 text-[10px] uppercase tracking-widest title-font">The Chronicle</span>
+            <div class="h-[1px] w-12 bg-[#c5a059]"></div>
+        </div>
+
+        <div id="storyText" class="flex-grow flex flex-col justify-center space-y-6 text-lg leading-relaxed text-gray-300 py-4 opacity-0 transition-opacity duration-700">
+            </div>
+
+        <div id="choices" class="space-y-4 pb-8 pt-6 opacity-0 transition-opacity duration-1000 delay-300">
+            </div>
+    </section>
+
+    <section id="screen3" class="min-h-screen hidden-screen flex flex-col justify-center items-center p-8 text-center bg-black relative">
+        <div class="absolute inset-0 bg-[radial-gradient(circle,rgba(197,160,89,0.05),transparent_60%)] pointer-events-none"></div>
+        
+        <h2 class="title-font text-2xl text-[#c5a059] mb-2">The Final Covenant</h2>
+        <p class="italic text-sm opacity-60 mb-12">"Press your thumb to seal this destiny forever."</p>
+        
+        <div id="sealArea" class="relative cursor-pointer group select-none">
+            <div id="waxSeal" class="w-40 h-40 rounded-full bg-[#8a0a1b] shadow-[0_0_30px_rgba(138,10,27,0.5)] flex items-center justify-center border-4 border-[#5a0510] relative z-10">
+                <div class="w-32 h-32 rounded-full border border-[#a61c2e] flex items-center justify-center">
+                    <span class="title-font text-5xl text-[#5a0510] font-bold opacity-80">N&N</span>
+                </div>
+            </div>
+            <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-10 h-20 bg-[#8a0a1b] -z-0 clip-ribbon"></div>
+        </div>
+
+        <div class="mt-12 w-64">
+            <div class="h-[1px] w-full bg-[#c5a059]/20 mb-2"></div>
+            <p id="sealStatus" class="text-[10px] uppercase tracking-[0.3em] text-[#c5a059] opacity-50">Awaiting Royal Seal</p>
+        </div>
+    </section>
+
+    <section id="screen4" class="min-h-screen hidden-screen flex flex-col justify-center items-center p-10 text-center relative">
+        <div class="parchment p-8 md:p-12 rounded-lg max-w-lg w-full border border-[#c5a059]/30">
+            <h1 id="endTitle" class="title-font text-3xl mb-4 text-[#c5a059]"></h1>
+            <p id="endDesc" class="text-lg italic leading-relaxed mb-8 opacity-90"></p>
+            
+            <div class="h-[1px] w-full bg-white/10 my-6"></div>
+            
+            <p id="endNote" class="text-xs uppercase tracking-widest opacity-50 mb-6"></p>
+            
+            <button onclick="restart()" class="text-sm border-b border-[#c5a059] pb-1 text-[#c5a059] hover:text-white transition-colors">
+                Reweave Fate
+            </button>
+        </div>
+    </section>
+
+    <script>
+        // --- STORY DATA ENGINE ---
+        const storyNodes = {
+            start: {
+                text: "The year is 1426. The rain falls heavy upon the cobblestones of Veridia. <br><br>Sir Nicholas stands beneath the shadow of the cathedral, his armor hidden beneath a soaked cloak. He has served your father, the Duke, for ten years. But tonight, he is not a soldier. He is a man in love with a woman he cannot have.<br><br>You, Lady Nadia, watch him from your balcony. The banquet honoring your betrothal to Prince Valerius is happening inside.",
+                choices: [
+                    { text: "Slip away to meet him in the garden.", next: "garden_meet" },
+                    { text: "Send a servant with a letter asking him to leave.", next: "letter_reject" },
+                    { text: "Stay on the balcony and gaze at him.", next: "balcony_gaze" }
+                ]
+            },
+            
+            // --- BRANCH A: GARDEN MEET ---
+            garden_meet: {
+                text: "You gather your skirts and descend the ivy-covered trellis. The air smells of wet earth and roses. Nicholas turns as you approach, his eyes wide with a mixture of hope and terror.<br><br>'Nadia,' he whispers, bowing low not out of duty, but devotion. 'You should not be here. If the Duke sees us...'",
+                choices: [
+                    { text: "'I do not care about the Duke. I only care about us.'", next: "bold_love" },
+                    { text: "'Take me away, Nicholas. Tonight.'", next: "runaway_plan" },
+                    { text: "'I came to say goodbye. I must marry the Prince.'", next: "sad_goodbye" }
+                ]
+            },
+
+            // --- BRANCH B: LETTER REJECT ---
+            letter_reject: {
+                text: "You cannot risk it. You pen a hasty note: 'My duty is to my house. Go, and live.'<br><br>You watch from the window as the servant hands him the parchment. Nicholas reads it. He does not look up. He mounts his horse and rides into the storm, taking your heart with him.",
+                choices: [
+                    { text: "Run after him before he vanishes.", next: "chase_horse" },
+                    { text: "Turn back to the banquet and accept your fate.", next: "end_duty" },
+                    { text: "Weep silently as he disappears.", next: "end_regret" }
+                ]
+            },
+
+            // --- BRANCH C: BALCONY GAZE ---
+            balcony_gaze: {
+                text: "You stand frozen. He looks up, rain streaming down his face. A silent communication passes between you—a lifetime of 'what ifs' spanning the distance between the mud and the marble.<br><br>Suddenly, your father, the Duke, steps onto the balcony behind you.",
+                choices: [
+                    { text: "Distract your father immediately.", next: "father_distract" },
+                    { text: "Point Nicholas out and feign ignorance.", next: "feign_ignorance" },
+                    { text: "Confess everything to your father right now.", next: "father_confess" }
+                ]
+            },
+
+            // --- MID GAME BRANCHES ---
+            bold_love: {
+                text: "Nicholas steps closer, daring to take your hand. His glove is rough leather against your silk skin. 'Then let us defy them. But know this—if we stay, we must hide. If we leave, we lose everything.'",
+                choices: [
+                    { text: "Kiss him. The world can burn.", next: "kiss_burn" },
+                    { text: "Pull away. The fear is too great.", next: "end_fear" },
+                    { text: "Give him your ring as a promise.", next: "ring_promise" }
+                ]
+            },
+            
+            runaway_plan: {
+                text: "His eyes darken with resolve. 'The horses are ready. But the roads are dangerous, and the Prince's guards are everywhere.'<br><br>He lifts you onto his steed. You ride into the night, but the sound of hooves follows you.",
+                choices: [
+                    { text: "Tell him to fight the guards.", next: "end_tragedy_fight" },
+                    { text: "Hide in the old chapel ruins.", next: "chapel_hide" },
+                    { text: "Surrender to save his life.", next: "end_sacrifice" }
+                ]
+            },
+
+            // --- ENDINGS ---
+            end_duty: {
+                title: "Ending: The Cold Crown",
+                desc: "You married the Prince. You became a Queen of great power. But every time it rains, you stand by the window, wondering where the knight with the sad eyes went. You survived, but you did not live.",
+                note: "Fate is cruel. Try again, my Queen."
+            },
+            end_regret: {
+                title: "Ending: A Quiet Sorrow",
+                desc: "Nicholas died in a war three years later. You possess his last letter, stained with blood, which simply reads: 'Nadia'. Some loves are not meant for this earth.",
+                note: "Heartbreak is a heavy burden. Reweave your fate."
+            },
+            end_tragedy_fight: {
+                title: "Ending: The Fallen Hero",
+                desc: "Nicholas drew his sword to protect you. He fought with the strength of ten men, but the arrows were too many. He died in your arms, whispering your name. You live on, but your heart is buried with him.",
+                note: "Valor cannot always defeat destiny. Try again."
+            },
+            end_fear: {
+                title: "Ending: The Coward's Safety",
+                desc: "You pulled away. Nicholas understood. He bowed one last time and left. You lived a safe, comfortable life, haunted by the ghost of the courage you never had.",
+                note: "Comfort is the enemy of passion. Try again."
+            },
+            end_sacrifice: {
+                title: "Ending: The Martyr",
+                desc: "To save him from execution, you returned to the castle. Nicholas was banished. You saved his life, but killed his soul. He wanders the world, a man without a home or a heart.",
+                note: "A noble sacrifice, but a lonely one. Try again."
+            },
+
+            // --- PATH TO HAPPY ENDING ---
+            chapel_hide: {
+                text: "You hide in the ruins of the old chapel. The guards ride past. In the silence of the stone walls, Nicholas lights a small fire.<br><br>'We have nothing,' he says, looking at you. 'No titles. No gold. Only this moment.'",
+                choices: [
+                    { text: "'This moment is all I ever wanted.'", next: "final_proposal" },
+                    { text: "'Perhaps we made a mistake.'", next: "end_regret" },
+                    { text: "Ask him what happens tomorrow.", next: "bold_love" }
+                ]
+            },
+            
+            kiss_burn: {
+                text: "The kiss tastes of rain and desperation. In that moment, the caste system crumbles. He is not a knight, and you are not a noble. You are simply two souls bound by the stars.",
+                choices: [
+                    { text: "Flee to the chapel ruins.", next: "chapel_hide" },
+                    { text: "Stay and fight.", next: "end_tragedy_fight" },
+                    { text: "Break the kiss and run.", next: "end_fear" }
+                ]
+            },
+
+            final_proposal: {
+                text: "Nicholas kneels on the stone floor. He takes your hand, trembling. <br><br>'I cannot offer you a kingdom, Nadia. I cannot offer you jewels. But I offer you my sword, my shield, and my soul, until my last breath.'<br><br>He looks up, tears in his eyes. 'Will you be mine, against all odds?'",
+                choices: [
+                    { text: "Make the Vow.", next: "ROYAL_SEAL" },
+                    { text: "Turn away.", next: "end_fear" },
+                    { text: "Say nothing.", next: "end_regret" }
+                ]
+            }
+        };
+
+        // --- GAME ENGINE ---
+        function startStory() {
+            document.getElementById('screen1').classList.add('hidden-screen');
+            document.getElementById('screen2').classList.remove('hidden-screen');
+            loadNode('start');
+        }
+
+        function loadNode(nodeId) {
+            // Check for Special Triggers
+            if (nodeId === 'ROYAL_SEAL') {
+                showSealScreen();
+                return;
+            }
+            // Check for Endings
+            if (nodeId.startsWith('end_')) {
+                showEnding(storyNodes[nodeId]);
+                return;
+            }
+
+            const node = storyNodes[nodeId];
+            const textEl = document.getElementById('storyText');
+            const choiceEl = document.getElementById('choices');
+
+            // Fade Out
+            textEl.style.opacity = '0';
+            choiceEl.style.opacity = '0';
+
+            setTimeout(() => {
+                // Update Content
+                textEl.innerHTML = node.text;
+                choiceEl.innerHTML = '';
+                
+                node.choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left p-4 choice-btn text-sm md:text-base border-b border-[#c5a059]/10 hover:pl-6 transition-all duration-300";
+                    btn.innerHTML = `<span class='text-[#c5a059] mr-2'>❖</span> ${choice.text}`;
+                    btn.onclick = () => loadNode(choice.next);
+                    choiceEl.appendChild(btn);
+                });
+
+                // Fade In
+                textEl.style.opacity = '1';
+                setTimeout(() => choiceEl.style.opacity = '1', 300);
+            }, 500);
+        }
+
+        // --- ROYAL SEAL LOGIC ---
+        function showSealScreen() {
+            document.getElementById('screen2').classList.add('hidden-screen');
+            document.getElementById('screen3').classList.remove('hidden-screen');
+            
+            const seal = document.getElementById('sealArea');
+            let isSealed = false;
+            let timer;
+
+            const startSeal = (e) => {
+                if(e.cancelable) e.preventDefault();
+                if(isSealed) return;
+                
+                document.getElementById('sealStatus').innerText = "Imprinting Vow...";
+                document.getElementById('sealStatus').style.opacity = "1";
+                document.getElementById('waxSeal').style.transform = "scale(0.9)";
+                
+                timer = setTimeout(() => {
+                    isSealed = true;
+                    if(navigator.vibrate) navigator.vibrate([100, 50, 200]);
+                    document.getElementById('sealStatus').innerText = "Vow Accepted";
+                    document.getElementById('sealStatus').classList.add('text-[#8a0a1b]');
+                    setTimeout(showHappyEnding, 1000);
+                }, 2000); // 2 second hold
+            };
+
+            const stopSeal = () => {
+                if(isSealed) return;
+                clearTimeout(timer);
+                document.getElementById('waxSeal').style.transform = "scale(1)";
+                document.getElementById('sealStatus').innerText = "Awaiting Royal Seal";
+                document.getElementById('sealStatus').style.opacity = "0.5";
+            };
+
+            seal.addEventListener('touchstart', startSeal);
+            seal.addEventListener('touchend', stopSeal);
+            seal.addEventListener('mousedown', startSeal);
+            seal.addEventListener('mouseup', stopSeal);
+        }
+
+        function showEnding(data) {
+            document.getElementById('screen2').classList.add('hidden-screen');
+            document.getElementById('screen4').classList.remove('hidden-screen');
+            
+            document.getElementById('endTitle').innerText = data.title;
+            document.getElementById('endDesc').innerText = data.desc;
+            document.getElementById('endNote').innerText = data.note;
+        }
+
+        function showHappyEnding() {
+            document.getElementById('screen3').classList.add('hidden-screen');
+            document.getElementById('screen4').classList.remove('hidden-screen');
+            
+            document.getElementById('endTitle').innerHTML = "The True Ending: <br>Eternal Union";
+            document.getElementById('endDesc').innerHTML = "You swore your vow. Nicholas kissed your hand, then your lips. <br><br>You did not return to the castle. You lived a life of freedom, hardship, and endless love. History forgot your titles, but the stars remembered your names.<br><br><b>Happy Propose Day, My Queen.</b>";
+            document.getElementById('endNote').innerText = "You found the one true path. But there are other stories to tell...";
+        }
+
+        function restart() {
+            document.getElementById('screen4').classList.add('hidden-screen');
+            startStory();
+        }
+    </script>
+</body>
+</html>
