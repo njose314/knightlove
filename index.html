@@ -3,525 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Crown & The Heart</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <title>50 Shades of Cocoa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@1,500;1,800&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #030303; 
-            --text-main: #e5e5e5; 
-            --gold: #c6a87c; 
-            --gold-dim: rgba(198, 168, 124, 0.5);
-            --crimson: #8a0a1b; 
-        }
-        
-        body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Cormorant Garamond', serif; 
-            overflow: hidden; /* Critical for App-like feel */
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --obsidian: #050505;
+            --rose-gold: #e5b3a3;
+            --gold-dim: rgba(191, 149, 63, 0.2);
+            --neon-pink: #ff0055;
+            --blood-red: #8a0000;
+            --gold-gradient: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
         }
 
-        .font-royal { font-family: 'Cinzel', serif; }
-        
-        /* Mobile Viewport Fixes */
-        .h-dvh { height: 100vh; height: 100dvh; } 
-        .hidden-screen { display: none !important; }
-        
-        /* Text Fade Animations */
-        .fade-enter { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; opacity: 0; transform: translateY(10px); }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.3s; }
-        .delay-3 { animation-delay: 0.5s; }
-        
-        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        * { box-sizing: border-box; touch-action: none; user-select: none; -webkit-tap-highlight-color: transparent; }
 
-        /* Custom Scrollbar */
-        .custom-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #0a0a0a; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
-
-        /* Choice Button Styling */
-        .choice-btn {
-            background: linear-gradient(90deg, rgba(198, 168, 124, 0.05) 0%, transparent 100%);
-            border-left: 2px solid var(--gold-dim);
-            transition: all 0.2s ease;
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: var(--obsidian); color: #fff;
+            font-family: 'Montserrat', sans-serif; overflow: hidden;
         }
-        .choice-btn:active { background: rgba(198, 168, 124, 0.15); border-color: var(--gold); transform: translateX(5px); }
 
-        /* Wax Seal Animation */
-        #waxSeal { transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .pressing #waxSeal { transform: scale(0.9) rotate(2deg); filter: brightness(0.9); }
+        /* --- BACKGROUND ATMOSPHERE --- */
+        #bg-layer {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, #1a1010 0%, #000 100%);
+        }
+        
+        .dust {
+            position: absolute; background: var(--rose-gold);
+            border-radius: 50%; opacity: 0;
+            animation: floatDust linear infinite;
+        }
+        @keyframes floatDust {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.5; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- TITLE SCREEN --- */
+        #title-screen {
+            position: fixed; inset: 0; z-index: 9999; background: #000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+        .gold-text {
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Bodoni Moda'; font-style: italic; animation: shine 4s linear infinite;
+        }
+        @keyframes shine { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+
+        /* --- GAME WORLD --- */
+        #viewport { width: 100%; height: 100%; position: relative; overflow: hidden; z-index: 2; }
+        
+        #track {
+            position: absolute; width: 100%; height: 12000px;
+            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* --- TILES --- */
+        .tile {
+            position: absolute; width: 55px; height: 55px; border-radius: 50%;
+            background: rgba(10, 10, 10, 0.8); border: 1px solid var(--gold-dim);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; color: rgba(255,255,255,0.4); font-family: 'Bodoni Moda';
+            box-shadow: 0 0 15px rgba(0,0,0,0.8); backdrop-filter: blur(2px);
+        }
+
+        .tile-hot {
+            border: 2px solid var(--neon-pink) !important; color: var(--neon-pink) !important;
+            box-shadow: 0 0 25px var(--neon-pink); animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 15px var(--neon-pink); } 50% { transform: scale(1.05); box-shadow: 0 0 35px var(--neon-pink); } 100% { transform: scale(1); box-shadow: 0 0 15px var(--neon-pink); } }
+
+        .tile-bad {
+            border: 2px solid var(--blood-red) !important; background: #1a0505;
+            box-shadow: 0 0 25px var(--blood-red);
+        }
+
+        /* --- PLAYER --- */
+        #player {
+            position: absolute; font-size: 55px; z-index: 100;
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.4));
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .hop { animation: hopAnim 0.6s ease-in-out; }
+        @keyframes hopAnim { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(-50px) scale(1.2); } 100% { transform: translateY(0) scale(1); } }
+
+        /* --- UI DOCK --- */
+        #ui-dock {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; height: 90px;
+            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 25px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 30px; z-index: 500; box-shadow: 0 20px 50px #000;
+        }
+
+        .dice-box {
+            font-size: 3rem; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+            transition: transform 0.2s;
+        }
+        .dice-box:active { transform: scale(0.9) rotate(20deg); }
+
+        /* --- MODAL --- */
+        #modal {
+            display: none; position: fixed; inset: 0; z-index: 8000;
+            background: rgba(0,0,0,0.96); align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.5s;
+        }
+        #modal.show { opacity: 1; }
+
+        .modal-card {
+            width: 85%; max-width: 400px; background: #08080a;
+            border: 1px solid var(--rose-gold); padding: 50px 30px;
+            text-align: center; position: relative;
+            box-shadow: 0 0 80px rgba(0,0,0,1);
+        }
+        .modal-text {
+            font-family: 'Bodoni Moda'; font-size: 1.3rem; line-height: 1.6;
+            color: #fff; margin-bottom: 30px; font-style: italic;
+        }
+
+        /* --- WIN SCREEN --- */
+        #win-screen {
+            display: none; position: fixed; inset: 0; z-index: 10000;
+            background: #050505; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 40px;
+        }
+
+        /* Particles */
+        .particle { position: absolute; pointer-events: none; opacity: 0; animation: floatUp 2s ease-out forwards; }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-80px); opacity: 0; } }
+
+        /* Shake Effect */
+        .shake { animation: shakeAnim 0.5s; }
+        @keyframes shakeAnim { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
     </style>
 </head>
 <body>
 
-    <section id="screen1" class="h-dvh w-full flex flex-col justify-center items-center p-8 text-center relative bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] bg-fixed">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/80 to-black pointer-events-none"></div>
-        
-        <div class="z-10 relative space-y-8 fade-enter">
-            <div class="border-y border-[#c6a87c]/30 py-8 px-2">
-                <p class="font-royal text-[10px] uppercase tracking-[0.4em] text-[#c6a87c] mb-4">Propose Day Special</p>
-                <h1 class="font-royal text-5xl md:text-6xl text-[#e5e5e5] tracking-tight leading-tight">
-                    The Crown <br>
-                    <span class="text-3xl italic font-serif text-[#c6a87c] opacity-80">&</span><br>
-                    The Heart
-                </h1>
-            </div>
-            
-            <p class="italic text-lg text-gray-400 font-serif opacity-80 fade-enter delay-2">
-                "A Knight without a name.<br>A Queen without a choice."
-            </p>
+    <div id="bg-layer"></div>
 
-            <button onclick="startGame()" class="mt-8 px-10 py-4 border border-[#c6a87c]/40 text-[#c6a87c] font-royal text-xs uppercase tracking-[0.25em] active:bg-[#c6a87c] active:text-black transition-all duration-300 fade-enter delay-3">
-                Open The Book
-            </button>
+    <div id="title-screen">
+        <h1 class="gold-text" style="font-size: 3.5rem; margin-bottom: 10px;">50 Shades<br>of Cocoa</h1>
+        <p style="letter-spacing: 5px; font-size: 0.7rem; color: #888; margin-bottom: 50px;">NAVEEN'S CUT</p>
+        <div onclick="startGame()" style="padding: 15px 50px; border: 1px solid var(--rose-gold); color: var(--rose-gold); letter-spacing: 3px; cursor: pointer; font-family: 'Bodoni Moda'; transition:0.3s;">UNWRAP ME</div>
+    </div>
+
+    <div id="viewport">
+        <div id="track">
+            <div id="player">👸</div>
         </div>
-    </section>
+    </div>
 
-    <section id="screen2" class="h-dvh w-full hidden-screen flex flex-col bg-[#050505] relative">
-        <header class="h-16 shrink-0 border-b border-white/5 flex items-center justify-center bg-[#050505] z-20 shadow-lg">
-            <span class="font-royal text-[9px] uppercase tracking-[0.3em] text-[#c6a87c] opacity-60">The Chronicle</span>
-        </header>
-
-        <div id="scrollContainer" class="flex-grow custom-scroll relative">
-            <div class="max-w-xl mx-auto min-h-full flex flex-col p-8 pb-12">
-                
-                <div id="storyContent" class="space-y-6 text-xl md:text-2xl leading-relaxed text-gray-300 font-serif mb-12">
-                    </div>
-
-                <div id="choiceContainer" class="mt-auto space-y-4 pt-8 border-t border-white/5 opacity-0 transition-opacity duration-700">
-                    </div>
-            </div>
+    <div id="ui-dock">
+        <div class="dice-box" id="dice" onclick="rollDice()">🎲</div>
+        <div style="text-align: right;">
+            <div style="font-size: 0.6rem; letter-spacing: 2px; color: #888;">TILE</div>
+            <div id="pos-display" style="font-size: 1.5rem; color: var(--rose-gold); font-family: 'Bodoni Moda';">1</div>
         </div>
-    </section>
+    </div>
 
-    <section id="screen3" class="h-dvh w-full hidden-screen flex flex-col justify-center items-center p-8 text-center bg-black relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#3d000a,transparent_70%)] opacity-30 pointer-events-none"></div>
-        
-        <div class="z-10 space-y-6 mb-16 fade-enter">
-            <h2 class="font-royal text-2xl md:text-3xl text-[#c6a87c]">The Covenant</h2>
-            <p class="font-serif text-xl text-gray-400 italic max-w-md mx-auto leading-relaxed">
-                "I renounce the crown. I choose the man."
-            </p>
+    <div id="modal">
+        <div class="modal-card">
+            <div id="modal-content" class="modal-text"></div>
+            <div onclick="closeModal()" style="font-size: 0.8rem; letter-spacing: 3px; color: var(--rose-gold); cursor: pointer; opacity: 0.8;">CONTINUE</div>
         </div>
+    </div>
 
-        <div id="sealContainer" class="relative group cursor-pointer z-10 select-none fade-enter delay-1">
-            <div id="waxSeal" class="w-56 h-56 rounded-full bg-gradient-to-br from-[#8a0a1b] to-[#4a0208] flex items-center justify-center relative border-[6px] border-[#2e0105] shadow-2xl">
-                <div class="w-44 h-44 rounded-full border border-[#b8233a]/30 flex flex-col items-center justify-center opacity-90 p-4">
-                    <span class="font-royal text-sm text-[#3d020a] drop-shadow-md uppercase tracking-[0.2em] mb-1">Two Souls</span>
-                    <div class="h-[1px] w-12 bg-[#3d020a] opacity-50 my-1"></div>
-                    <span class="font-royal text-sm text-[#3d020a] drop-shadow-md uppercase tracking-[0.2em] mt-1">Now One</span>
-                </div>
-                <div class="absolute top-8 left-12 w-16 h-8 bg-white opacity-5 rounded-full blur-xl"></div>
-            </div>
-        </div>
-
-        <div class="mt-12 z-10 fade-enter delay-2">
-            <p id="sealInstruction" class="font-royal text-[10px] uppercase tracking-[0.3em] text-[#c6a87c] opacity-60 animate-pulse">
-                Press & Hold to Seal
-            </p>
-        </div>
-    </section>
-
-    <section id="screen4" class="h-dvh w-full hidden-screen flex flex-col justify-center items-center p-6 bg-[#030303] relative">
-        <div class="border border-[#c6a87c]/20 bg-[#080808] p-10 max-w-md w-full text-center shadow-2xl relative fade-enter">
-            <span class="absolute top-2 left-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌜</span>
-            <span class="absolute top-2 right-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌝</span>
-            <span class="absolute bottom-2 left-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌞</span>
-            <span class="absolute bottom-2 right-2 text-[#c6a87c] opacity-40 text-xl font-serif">⌟</span>
-
-            <h1 id="endTitle" class="font-royal text-2xl text-[#c6a87c] mb-6 leading-tight"></h1>
-            <p id="endDesc" class="font-serif text-lg text-gray-300 leading-relaxed mb-8 opacity-90"></p>
-            
-            <div class="h-px w-16 bg-[#c6a87c]/30 mx-auto mb-6"></div>
-            
-            <p id="endNote" class="font-royal text-[9px] uppercase tracking-[0.2em] text-gray-500 mb-8"></p>
-            
-            <button onclick="resetGame()" class="text-[#c6a87c] text-xs font-royal uppercase tracking-widest border-b border-[#c6a87c]/30 pb-1 hover:text-white hover:border-white transition-colors">
-                Rewrite Destiny
-            </button>
-        </div>
-    </section>
+    <div id="win-screen">
+        <div style="font-size: 4rem;">🍫</div>
+        <h1 class="gold-text" style="font-size: 2.5rem; margin: 20px 0;">Happy Chocolate Day!</h1>
+        <p style="font-family: 'Bodoni Moda'; font-size: 1.4rem; line-height: 1.6; color: #e5b3a3;">
+            I am your chocolate, dark skinned and shiny, and I love you soooo much, my baby.
+        </p>
+        <p style="font-size: 0.8rem; margin-top: 30px; opacity: 0.5;">FOREVER YOURS, NAVEEN</p>
+    </div>
 
     <script>
-        // --- NARRATIVE DATABASE ---
-        const story = {
-            // ACT 1: THE BANQUET
-            start: {
-                text: [
-                    "The year is 1426. The Kingdom of Veridia is drowning in a storm.",
-                    "The Great Hall is filled with music and laughter, celebrating your betrothal to a Prince you do not love—a man with a crown of gold and a heart of ice.",
-                    "But your eyes are not on the Prince. They are fixed on the shadowed figure standing near the heavy oak doors.",
-                    "The Knight. Your father's sworn sword. A man of no title, no land, and no right to look at you the way he does.",
-                    "He turns to leave, his cape swirling around him, stepping out into the relentless rain."
-                ],
-                choices: [
-                    { label: "Slip away to the gardens to stop him.", next: "garden_01" },
-                    { label: "Stay. A Queen does not chase shadows.", next: "duty_01" },
-                    { label: "Send a page with a secret letter.", next: "letter_01" }
-                ]
-            },
+        // --- VISUALS: BACKGROUND DUST ---
+        const bg = document.getElementById('bg-layer');
+        for(let i=0; i<50; i++) {
+            const d = document.createElement('div');
+            d.className = 'dust';
+            d.style.left = Math.random() * 100 + '%';
+            d.style.top = Math.random() * 100 + '%';
+            d.style.width = Math.random() * 3 + 1 + 'px';
+            d.style.height = d.style.width;
+            d.style.animationDuration = Math.random() * 10 + 10 + 's';
+            d.style.animationDelay = Math.random() * 5 + 's';
+            bg.appendChild(d);
+        }
 
-            // --- ACT 2: THE GARDEN ---
-            garden_01: {
-                text: [
-                    "You slip through the servants' passage, silk skirts trailing in the mud. The rain hits your skin like needles.",
-                    "You find him near the stables, mounting his black steed. He freezes as you approach.",
-                    "'My Lady?' His voice is rough. 'You cannot be here. If the Duke sees us, it is my head on a pike.'"
-                ],
-                choices: [
-                    { label: "Reach for his hand. 'I do not care.'", next: "garden_touch" },
-                    { label: "Hesitate. 'I just wanted to say goodbye.'", next: "end_regret" }
-                ]
-            },
-            garden_touch: {
-                text: [
-                    "You reach out. Your trembling fingers brush his leather gauntlet. He flinches, then succumbs, covering your hand with his.",
-                    "'This world was not made for us,' he says. 'I am a sword to be used and discarded. You are a jewel to be sold. We can never be.'"
-                ],
-                choices: [
-                    { label: "'Then let us break this world.'", next: "garden_kiss" },
-                    { label: "Pull back in fear.", next: "end_fear" }
-                ]
-            },
-            garden_kiss: {
-                text: [
-                    "The distance vanishes. He pulls you close, his armor cold against your chest, his kiss burning with a desperate heat.",
-                    "When you pull apart, his eyes are steel. 'If we do this, there is no going back. We must leave Veridia tonight.'",
-                    "'How do we escape, my Queen? The choices are few, and death waits on all of them.'"
-                ],
-                choices: [
-                    { label: "Ride the King's Road. It is the fastest way.", next: "path_road" },
-                    { label: "Bribe a smuggler at the Docks.", next: "path_docks" },
-                    { label: "Cross the Blackwood Forest. It is slow, but hidden.", next: "path_forest" }
-                ]
-            },
+        // --- CONTENT LOGIC ---
 
-            // --- ACT 3: THE BRANCHING PATHS ---
+        // 1. Teases (Neutral Only)
+        const teases = [
+            "(I can see you blushing hehe)", 
+            "(i can see your smile)", 
+            "(ahhh dont look at me like that)", 
+            "(dont start sweating)", 
+            "(you look so pretty when you're shy)",
+            "(I know you want this)"
+        ];
 
-            // PATH A: THE KING'S ROAD (Aggressive/Fast)
-            path_road: {
-                text: [
-                    "You mount his horse, riding hard down the main cobblestone road. The wind howls.",
-                    "Suddenly, torches flare ahead. A patrol of the Prince's elite guard blocks the bridge.",
-                    "'Halt!' they cry. 'Surrender the Lady!'"
-                ],
-                choices: [
-                    { label: "Tell the Knight to fight them.", next: "fight_fail" },
-                    { label: "Try to charge through the blockade.", next: "charge_fail" }
-                ]
-            },
-            charge_fail: {
-                text: [
-                    "The Knight spurs the horse, aiming for a gap in the line. But there are too many pikes.",
-                    "The horse rears. You fall into the mud. The Knight draws his sword, standing over you, but a crossbow bolt finds his chest.",
-                    "He falls. You are dragged away screaming."
-                ],
-                choices: [
-                    { label: "Reach for him as they drag you away.", next: "end_execution" }
-                ]
-            },
-            fight_fail: {
-                 text: [
-                    "He fights with the strength of ten men. But they are twenty. He is overwhelmed.",
-                    "They do not kill him. They chain him.",
-                    "You are returned to the castle in disgrace."
-                 ],
-                 choices: [
-                    { label: "Watch them take him away.", next: "end_torture" }
-                 ]
-            },
-
-            // PATH B: THE DOCKS (Deceptive)
-            path_docks: {
-                text: [
-                    "You ride to the harbor, the smell of salt and rot in the air. The Knight finds a smuggler with a small boat.",
-                    "'Five gold pieces,' the smuggler grins, eyeing your jewelry. 'And the lady's ring.'",
-                    "The Knight nods, but his hand hovers near his dagger."
-                ],
-                choices: [
-                    { label: "Trust the smuggler. Give him the ring.", next: "docks_betrayal" },
-                    { label: "The Knight threatens him instead.", next: "docks_fight" }
-                ]
-            },
-            docks_betrayal: {
-                text: [
-                    "You hand over the ring. The smuggler whistles. From the shadows, the City Watch emerges.",
-                    "'A fine prize,' the Captain says.",
-                    "The Knight pushes you behind him. 'Run, my Lady!'"
-                ],
-                choices: [
-                    { label: "Refuse to leave him.", next: "end_torture" },
-                    { label: "Run into the alleyway.", next: "end_heartbreak" }
-                ]
-            },
-            docks_fight: {
-                 text: [
-                    "The Knight draws his dagger. The smuggler laughs and shouts for the guards.",
-                    "In the chaos, a stray arrow meant for the Knight strikes you instead."
-                 ],
-                 choices: [
-                    { label: "Fall into his arms.", next: "end_death_woman" }
-                 ]
-            },
-
-            // PATH C: THE BLACKWOOD FOREST (The True Path)
-            path_forest: {
-                text: [
-                    "You turn away from the road, plunging into the ancient Blackwood Forest. It is dark, cold, and silent.",
-                    "Branches tear at your dress. The horse stumbles in the thick mud. You have ridden for hours.",
-                    "You hear the howl of wolves nearby. The Knight looks at you. 'We must rest, or the horse will die. But if we stop, the frost might take us.'"
-                ],
-                choices: [
-                    { label: "Push the horse harder. We cannot stop.", next: "forest_fail" },
-                    { label: "Dismount and walk to spare the horse.", next: "forest_success" }
-                ]
-            },
-            forest_fail: {
-                text: [
-                    "You drive the exhausted beast forward. It collapses, breaking its leg.",
-                    "You are stranded in the snow. The wolves draw closer. The cold seeps into your bones.",
-                    "You fall asleep in his arms, never to wake."
-                ],
-                choices: [
-                    { label: "Close your eyes.", next: "end_frozen" }
-                ]
-            },
-            forest_success: {
-                text: [
-                    "You dismount. Hand in hand, you lead the horse through the snow. It is grueling work.",
-                    "Just as dawn breaks, you see it—the ruins of the Old Chapel. A sanctuary forgotten by the King.",
-                    "The Knight builds a fire. He looks at you, dirt on his face, but his eyes shining with hope.",
-                    "'We have nothing,' he says. 'No titles. No gold. No kingdom. Only this fire and each other.'"
-                ],
-                choices: [
-                    { label: "'That is all I ever wanted.'", next: "ROYAL_SEAL" },
-                    { label: "Look back at the way you came.", next: "end_regret" }
-                ]
-            },
-
-            // --- ACT 4: THE LETTER (Alternative Start) ---
-            letter_01: {
-                text: [
-                    "You scribble a note: 'My heart goes with you.' You pay a page boy to run it to him.",
-                    "You watch him read it in the rain. He looks up at your window—a look of utter devastation—before riding into the dark."
-                ],
-                choices: [
-                    { label: "Run to the stables immediately.", next: "chase_fail" },
-                    { label: "Turn back to the banquet.", next: "end_duty" }
-                ]
-            },
-            chase_fail: {
-                text: [
-                    "You run until your lungs burn. You reach the courtyard.",
-                    "Empty. Only the sound of fading hoofbeats in the rain.",
-                    "You were five minutes too late."
-                ],
-                choices: [
-                    { label: "Collapse and weep.", next: "end_missed" }
-                ]
-            },
-
-            // --- PATH: DUTY (FIXED) ---
-            duty_01: {
-                text: [
-                    "You straighten your spine. You are a daughter of Veridia. You do not chase dreams.",
-                    "You turn back to the Prince. He smiles cruelly. 'Finally focused, my dear?'",
-                    "The heavy doors shut, sealing the Knight out, and sealing you in a cage of gold."
-                ],
-                choices: [
-                    { label: "Accept your fate.", next: "end_duty" }
-                ]
-            },
-
-            // --- ENDINGS ---
-            
-            // 1. EXECUTION
-            end_execution: {
-                title: "Ending: The Crimson Dawn",
-                desc: "You were captured. The King showed no mercy for treason. You stood on the scaffold hand in hand with the Knight. The last thing you saw was his eyes, full of love, before the axe fell.",
-                note: "A tragic end to a bold love. Try again."
-            },
-
-            // 2. TORTURE/PRISON
-            end_torture: {
-                title: "Ending: The Iron Cage",
-                desc: "You were dragged back to the castle and forced to marry the Prince. The Knight was thrown into the deepest dungeon. He lives there still, rotting in the dark, whispering your name to the rats.",
-                note: "A fate worse than death. Try again."
-            },
-
-            // 3. HEARTBREAK
-            end_heartbreak: {
-                title: "Ending: The Twin Graves",
-                desc: "The Knight stayed behind to fight the guards, buying you time to escape. You heard his final scream. You escaped, but your heart stopped beating that day. You died of grief a month later.",
-                note: "He died for you. You died for him. Try again."
-            },
-
-            // 4. WOMAN DIES
-            end_death_woman: {
-                title: "Ending: The Shattered Jewel",
-                desc: "The arrow struck true. You died in the Knight's arms on the dirty docks. Driven mad by grief, he surrendered to the guards, begging for death.",
-                note: "Recklessness leads to ruin. Try again."
-            },
-
-            // 5. FROZEN
-            end_frozen: {
-                title: "Ending: Frozen Hearts",
-                desc: "The winter took you both. They found your bodies days later, frozen in an embrace beneath the snow. At least you were together.",
-                note: "Patience is a virtue. Try again."
-            },
-
-            // 6. REGRET
-            end_regret: {
-                title: "Ending: The Ghost of What If",
-                desc: "He rode away. You married the Prince. You lived a life of luxury, but you never smiled truly again. The ghost of the man you loved haunted your halls forever.",
-                note: "Regret is a poison. Reweave your fate."
-            },
-
-            // 7. DUTY
-            end_duty: {
-                title: "Ending: The Cold Queen",
-                desc: "You became a powerful Queen. Respected, feared, and utterly alone. You died surrounded by gold, whispering a name no one remembered.",
-                note: "Power cannot comfort a lonely soul. Try again."
-            },
-
-            // 8. MISSED CHANCE
-            end_missed: {
-                title: "Ending: Too Late",
-                desc: "Timing is everything. He died in a foreign war believing you never cared. Fate is cruel to those who wait.",
-                note: "Do not wait. Act. Try again."
-            },
-            
-            // 9. COWARDICE
-            end_fear: {
-                title: "Ending: The Golden Cage",
-                desc: "Fear held you back. You stayed safe in your castle. He was arrested the next day. You saved his life by banishing him, but you destroyed his soul.",
-                note: "Comfort is the enemy of passion. Try again."
-            },
-            
-            // --- HAPPY ENDING ---
-            happy_ending: {
-                title: "The True Ending: Freedom",
-                desc: "You sealed the vow in the ruins of the chapel. You rode south, leaving the crown behind. <br><br>History calls you the 'Lost Queen,' but you were never lost. You lived by the sea with him, growing old in a house filled with warmth and laughter.<br><br><b>Two souls, finally one.</b>",
-                note: "You found the only path that matters."
-            }
+        // 2. Helper Functions
+        
+        // Adds "babe" randomly (30% chance), ONLY for neutral/bad
+        const addBabe = (text) => {
+            if (Math.random() > 0.7) return text + ", babe.";
+            return text;
         };
 
+        // Adds Tease randomly (30% chance), ONLY for neutral
+        const addTease = (text) => {
+            if (Math.random() > 0.7) {
+                const tease = teases[Math.floor(Math.random() * teases.length)];
+                return text + " " + tease;
+            }
+            return text;
+        };
+
+
+        // --- TILE DATA CONFIG ---
+        
+        // Ultra Hot: Specific Index -> Text
+        const ultraHotDB = {
+            69: "I'm going to spread your legs slowly... and start devouring the honey there with full passion. I want to hear you moan and wriggle in my grip. 😈",
+            80: "Your breasts are perfection. My lips are dying to wrap around your nipples right now. 😈 hehe",
+            90: "Drawing circles around your navel with my tongue... giving it a wet kiss and a lick... tell me how that feels? 😈",
+            98: "I'm pressing my face right into your soft bum... and giving it a playful bite. You are all mine. 😈"
+        };
+
+        const badDB = [
+            "Your phone died. Mood ruined! Back 3 spaces.",
+            "Wi-Fi is glitching. You're frozen! Back 2 spaces.",
+            "You were overworking and dozed off. Wake up! Back 4 spaces.",
+            "Your boss called. Panic mode! Back 3 spaces.",
+            "Stepped on a Lego. Ouch! Back 2 spaces.",
+            "Spilled coffee on your shirt. Go change. Back 3 spaces.",
+            "Forgot to reply to my text? Tsk tsk. Back 2 spaces.",
+            "You tripped over your own feet. Graceful. Back 3 spaces.",
+            "Burned the toast? Distracted much? Back 2 spaces.",
+            "You forgot where you put your keys. Brain fog. Back 3 spaces."
+        ];
+
+        const hotDB = [
+            "My hands around your waist... pulling you flush against me. No space between us. 😈",
+            "You unzip my pants and grab me, and your soft hands starts stroking it gently while you kiss my lips and my hands grabbing your bum. 😈",
+            "Blindfolded. You don't get to see where I touch you next... hehe 😈",
+            "A silk tie around your wrists. You're mine to play with now. 😈",
+            "Using an ice cube to trace a line from your throat to your navel... shhh. 😈",
+            "Whispering exactly what I'm going to do to you. Every dirty detail. 😈",
+            "Pinned against the wall. A kiss so deep you forget to breathe. 😈",
+            "Massage oil. My hands. Your back. And then... lower. 😈",
+            "I want to count your goosebumps with my lips. 😈",
+            "Wearing that outfit? You're asking for trouble. 😈",
+            "My hand in your hair, pulling your head back for a deep kiss. 😈",
+            "Biting your earlobe softly... then harder. 😈",
+            "Lifting you up against the counter. Wrap your legs. 😈",
+            "Tracing your spine with my fingernails. 😈"
+        ];
+
+        // Expanded Neutral DB (30 items to prevent repetition)
+        const neutralDB = [
+            "Trace the line of my jaw with your finger.",
+            "Tell me the exact moment you knew you loved me.",
+            "A soft kiss on your forehead. Safe and warm.",
+            "Hold my hand. Interlace fingers and squeeze tight.",
+            "I want to cook dinner for you tonight.",
+            "You are the most beautiful thing I've ever seen.",
+            "Bite your lip for me. Just like that.",
+            "I'm addicted to your scent.",
+            "Just look at me. Don't look away.",
+            "I want to make you feel like the only girl in the world.",
+            "Let's stay in bed all day.",
+            "You are my favorite distraction.",
+            "I love the way your hair falls on your face.",
+            "Your laugh is my favorite sound.",
+            "Come closer, I want to whisper something.",
+            "Let's just cuddle for a minute. No words.",
+            "You make my heart race even when you do nothing.",
+            "I want to massage your feet later.",
+            "Put your head on my shoulder.",
+            "You are glowing today.",
+            "I miss you even when you are right here.",
+            "Let me brush your hair.",
+            "I want to wake up next to you every day.",
+            "Your smile is dangerous.",
+            "I love how you look at me.",
+            "Lean in closer.",
+            "Rub my back? I'll return the favor.",
+            "Tell me a secret you've never told anyone.",
+            "You are my home.",
+            "Close your eyes and let me guide you."
+        ];
+
+        // --- GENERATE TILE MAP ---
+        const tileMap = {};
+        
+        // Modulo counters
+        let cBad = 0; 
+        let cHot = 0; 
+        let cNeu = 0;
+
+        for (let i = 1; i <= 100; i++) {
+            let type, text, move;
+
+            // 1. Check Ultra Hot
+            if (ultraHotDB[i]) {
+                type = 'hot';
+                text = ultraHotDB[i];
+                move = 0;
+            } 
+            // 2. Bad Tiles (Every 9th)
+            else if (i % 9 === 0) {
+                type = 'bad';
+                text = addBabe(badDB[cBad % badDB.length]);
+                cBad++;
+                move = -3;
+            } 
+            // 3. Hot Tiles (Every 6th)
+            else if (i % 6 === 0) {
+                type = 'hot';
+                // Hot tiles get NO babe, NO tease.
+                text = hotDB[cHot % hotDB.length];
+                cHot++;
+                move = 0;
+            } 
+            // 4. Neutral/Romantic
+            else {
+                type = 'neutral';
+                let rawText = neutralDB[cNeu % neutralDB.length];
+                // Randomly add "babe" OR "tease" (not both to avoid clutter)
+                if(Math.random() > 0.5) text = addBabe(rawText);
+                else text = addTease(rawText);
+                
+                cNeu++;
+                move = 0;
+            }
+
+            tileMap[i] = { type, text, move };
+        }
+
+
         // --- GAME ENGINE ---
-        const scrollContainer = document.getElementById('scrollContainer');
-        const contentDiv = document.getElementById('storyContent');
-        const choiceDiv = document.getElementById('choiceContainer');
+        const track = document.getElementById('track');
+        const player = document.getElementById('player');
+        let currentPos = 1;
+        let pendingMove = 0;
+        let lastRoll = 0;
+
+        // Build DOM Nodes
+        for (let i = 1; i <= 100; i++) {
+            const t = document.createElement('div');
+            const data = tileMap[i];
+            
+            t.className = `tile ${data.type === 'hot' ? 'tile-hot' : data.type === 'bad' ? 'tile-bad' : ''}`;
+            t.id = `tile-${i}`;
+            
+            if (data.type === 'hot') t.innerText = '❤️';
+            else if (data.type === 'bad') t.innerText = '💀';
+            else t.innerText = i;
+
+            const x = 50 + Math.sin(i * 0.5) * 35;
+            const y = (100 - i) * 90 + 300;
+            
+            t.style.left = `${x}%`;
+            t.style.top = `${y}px`;
+            track.appendChild(t);
+        }
 
         function startGame() {
-            document.getElementById('screen1').classList.add('hidden-screen');
-            document.getElementById('screen2').classList.remove('hidden-screen');
-            loadNode('start');
+            document.getElementById('title-screen').style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('title-screen').style.display = 'none';
+                syncCamera(1);
+            }, 1000);
         }
 
-        function loadNode(nodeId) {
-            if (nodeId === 'ROYAL_SEAL') return showSealScreen();
-            if (nodeId.startsWith('end_')) return showEnding(story[nodeId]);
-
-            const data = story[nodeId];
-
-            contentDiv.style.opacity = '0';
-            choiceDiv.style.opacity = '0';
+        function rollDice() {
+            const dice = document.getElementById('dice');
+            dice.style.transform = "rotate(720deg) scale(1.2)";
+            if(navigator.vibrate) navigator.vibrate(10);
 
             setTimeout(() => {
-                scrollContainer.scrollTop = 0;
-                contentDiv.innerHTML = '';
+                const options = [1, 1, 2, 2, 3, 3, 4, 5];
+                let roll = options[Math.floor(Math.random() * options.length)];
+                if (roll === lastRoll) roll = options[Math.floor(Math.random() * options.length)]; 
+                lastRoll = roll;
+
+                dice.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][roll-1];
+                dice.style.transform = "rotate(0deg)";
+                moveTo(currentPos + roll);
+            }, 600);
+        }
+
+        function moveTo(target) {
+            if (target >= 100) {
+                triggerWin();
+                return;
+            }
+
+            currentPos = target;
+            document.getElementById('pos-display').innerText = currentPos;
+            const t = document.getElementById(`tile-${currentPos}`);
+            
+            player.classList.add('hop');
+            player.style.left = (t.offsetLeft - 10) + 'px';
+            player.style.top = (t.offsetTop - 45) + 'px';
+            
+            syncCamera(currentPos);
+
+            setTimeout(() => {
+                player.classList.remove('hop');
+                const data = tileMap[currentPos];
                 
-                data.text.forEach((para, i) => {
-                    const p = document.createElement('p');
-                    p.className = `fade-enter delay-${Math.min(i, 3)}`;
-                    p.style.animationDelay = `${i * 0.15}s`;
-                    p.innerText = para;
-                    contentDiv.appendChild(p);
-                });
+                if (data.type === 'hot') {
+                    spawnParticles(t.offsetLeft, t.offsetTop);
+                } else if (data.type === 'bad') {
+                    document.body.classList.add('shake');
+                    setTimeout(() => document.body.classList.remove('shake'), 500);
+                    if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                }
 
-                choiceDiv.innerHTML = '';
-                data.choices.forEach((choice) => {
-                    const btn = document.createElement('button');
-                    btn.className = "choice-btn w-full py-5 px-6 text-left group flex items-center";
-                    btn.innerHTML = `
-                        <span class="font-royal text-[#c6a87c] mr-4 text-sm opacity-60 group-hover:opacity-100 transition-opacity">◇</span>
-                        <span class="font-serif text-lg text-gray-300 group-hover:text-white transition-colors">${choice.label}</span>
-                    `;
-                    btn.onclick = () => {
-                        if (navigator.vibrate) navigator.vibrate(10);
-                        loadNode(choice.next);
-                    };
-                    choiceDiv.appendChild(btn);
-                });
-
-                contentDiv.style.opacity = '1';
-                setTimeout(() => choiceDiv.style.opacity = '1', 600);
-            }, 300);
+                setTimeout(() => {
+                    pendingMove = data.move;
+                    showModal(data.text, data.type);
+                }, 600);
+            }, 500);
         }
 
-        function showSealScreen() {
-            document.getElementById('screen2').classList.add('hidden-screen');
-            document.getElementById('screen3').classList.remove('hidden-screen');
+        function syncCamera(pos) {
+            const t = document.getElementById(`tile-${pos}`);
+            const offset = -(t.offsetTop - window.innerHeight / 2);
+            track.style.transform = `translateY(${offset}px)`;
+        }
+
+        function showModal(text, type) {
+            const m = document.getElementById('modal');
+            const c = document.getElementById('modal-content');
+            c.innerText = text;
             
-            const seal = document.getElementById('sealContainer');
-            const wax = document.getElementById('waxSeal');
-            const instr = document.getElementById('sealInstruction');
-            let holdTimer;
-            let isHolding = false;
+            if (type === 'hot') c.style.color = 'var(--neon-pink)';
+            else if (type === 'bad') c.style.color = '#ff4444';
+            else c.style.color = '#fff';
 
-            const startHold = (e) => {
-                if(e.cancelable) e.preventDefault();
-                if(isHolding) return;
-                isHolding = true;
-
-                seal.classList.add('pressing');
-                instr.innerText = "Imprinting...";
-                instr.classList.remove('opacity-60', 'animate-pulse');
-                instr.classList.add('text-white');
-
-                holdTimer = setTimeout(() => {
-                    if (navigator.vibrate) navigator.vibrate([50, 50, 200]);
-                    instr.innerText = "Vow Accepted";
-                    instr.classList.add('text-[#8a0a1b]');
-                    wax.style.transform = "scale(1)";
-                    setTimeout(() => showEnding(story.happy_ending), 1500);
-                }, 2000);
-            };
-
-            const endHold = () => {
-                if(!isHolding) return;
-                isHolding = false;
-                clearTimeout(holdTimer);
-                seal.classList.remove('pressing');
-                instr.innerText = "Press & Hold to Seal";
-                instr.classList.add('opacity-60', 'animate-pulse');
-                instr.classList.remove('text-white');
-            };
-
-            seal.addEventListener('touchstart', startHold);
-            seal.addEventListener('touchend', endHold);
-            seal.addEventListener('mousedown', startHold);
-            seal.addEventListener('mouseup', endHold);
-            seal.addEventListener('mouseleave', endHold);
+            m.style.display = 'flex';
+            requestAnimationFrame(() => m.classList.add('show'));
         }
 
-        function showEnding(data) {
-            document.getElementById('screen2').classList.add('hidden-screen');
-            document.getElementById('screen3').classList.add('hidden-screen');
-            document.getElementById('screen4').classList.remove('hidden-screen');
+        function closeModal() {
+            const m = document.getElementById('modal');
+            m.classList.remove('show');
             
-            document.getElementById('endTitle').innerHTML = data.title;
-            document.getElementById('endDesc').innerHTML = data.desc;
-            document.getElementById('endNote').innerText = data.note;
+            setTimeout(() => {
+                m.style.display = 'none';
+                if (pendingMove !== 0) {
+                    let next = Math.max(1, currentPos + pendingMove);
+                    pendingMove = 0; 
+                    currentPos = next;
+                    document.getElementById('pos-display').innerText = currentPos;
+                    const t = document.getElementById(`tile-${currentPos}`);
+                    player.style.left = (t.offsetLeft - 10) + 'px';
+                    player.style.top = (t.offsetTop - 45) + 'px';
+                    syncCamera(currentPos);
+                }
+            }, 500);
         }
 
-        function resetGame() {
-            document.getElementById('screen4').classList.add('hidden-screen');
-            startGame();
+        function spawnParticles(x, y) {
+            for(let i=0; i<30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.innerText = '❤️';
+                p.style.left = (x + 20) + 'px';
+                p.style.top = (y + 20) + 'px';
+                p.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                p.style.color = '#ff0055';
+                track.appendChild(p);
+                setTimeout(() => p.remove(), 2000);
+            }
         }
+
+        function triggerWin() {
+            document.getElementById('win-screen').style.display = 'flex';
+            spawnParticles(window.innerWidth/2, window.innerHeight/2);
+        }
+
+        setTimeout(() => {
+            const t = document.getElementById('tile-1');
+            player.style.left = (t.offsetLeft - 10) + 'px';
+            player.style.top = (t.offsetTop - 45) + 'px';
+        }, 100);
     </script>
 </body>
 </html>
